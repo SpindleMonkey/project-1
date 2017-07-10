@@ -5,23 +5,31 @@ Project 1 for WDI4
 
 Remember those games we played as children? Dodge ball? Tag? Hide and seek? This is a bitter/cynical recreation of my childhood nightmare: Red Rover.
 
-This is a two-player game, with each player (or captain) leading a team of mammals (1st graders? thugs? zombies? raccoons? actual mammals are still TBD). Team-size is determined by the players before the game starts. 
+This is a two-player game, with each player (or captain) leading a team of mammals (1st graders? thugs (a/k/a the neighborhood kids)? zombies? raccoons? actual mammals are still TBD and will depend on both time and my image-Googling skills). Team-size is determined by the players before the game starts. 
 
-Using animation and DOM manipulation to show the results, each team will alternate "Red Rover, Red Rover, send [insert your least liked mammal on the other team] right over" requests, until only 1 mammal remains on the losing team.
+Using animation and DOM manipulation to show the results, each team will alternate "Red Rover, Red Rover, send [insert your least liked mammal on the other team] right over" requests, until all mammals are on the same team (unless they're no longer breathing, of course).
 
-Possible upgrades to the game include:
+Possible upgrades to the game:
+* ability to select which of the 2 players to add to your team when you break through
 * scoreboard showing top 5 teams
+* time-limit the game (you know, like the way recess limited the time we had to play this evil game)
 * varying health/strength/likeability scores for each of the team members that are updated after
 each round
-* random aids allocated to each team at the start of a new game (e.g., grenades, stink bombs)
-* ability to pick your team members
+* random tools allocated to each team at the start of a new game (e.g., grenades, killer bees, stink bombs)
+* ability to pick team members from a pool of mammals
 
-
+Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/wiki/Red_Rover), if you've successfully blocked this particular humiliation from your memory.
 
 ---
 
 ### technologies used
-HTML, CSS, JavaScript, DOM manipulation (vanilla JS or jQuery???)
+* HTML
+* CSS
+* JavaScript
+* DOM manipulation _(vanilla JS or jQuery???)_
+* _Canvas?_
+* _Flexbox?_
+
 
 ---
 
