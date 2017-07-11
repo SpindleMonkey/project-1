@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+}
+
+/**
+ * Set up basic page defaults
+ */
+body {
+  background: #fff;
+  color: #000;
+  font: 18px 'Zilla Slab', serif;
+}
+
+/**
+ * Set up basic header defaults
+ */
+header {
+  color: red;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 auto;
+  width: 500px;
+}
+
+/**
+ * Set up basic section defaults
+ */
+section {
+  margin: 0 auto;
+  width: 500px;
+}
+
+/**
+ * Set up basic footer defaults
+ */
+footer {
+  width: 500px;
+}
+
+input {
+  margin-bottom: 20px;
+}
+
+input[type=submit] {
+  background: rgba(255, 0, 0, 1);
+  color: #fff;
+  font: 18px 'Zilla Slab', serif;
+}
+
+input[type=submit]:hover {
+  background: rgba(255, 0, 0, .8);
+}
+
+.formGroup {
+  background: rgba(255, 0, 0, .3);
+  display: inline-block;
+  padding: 20px;
+  width: 100%;
+}
+
+#container {
+  width: 100%;
+}
+
+
