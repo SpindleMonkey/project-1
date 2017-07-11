@@ -35,12 +35,12 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 
 ### approach taken
 
-7/11/17: Set up [Trello account](https://trello.com/conniekephart) to track stories/progress; project board is [Red Rover](https://trello.com/b/zXJaTWNl/red-rover).
-
-7/10/17: Started design with some rough wireframes of the landing page and game board.
+7/11/17: Set up [Trello account](https://trello.com/conniekephart) to track stories/progress; project board is [Red Rover](https://trello.com/b/zXJaTWNl/red-rover). Updated wireframes.
 
 ![](assets/landingWireframe.JPG)
 ![](assets/gameWireframe.JPG)
+
+7/10/17: Started design with some rough wireframes of the landing page and game board.
 
 
 ---
