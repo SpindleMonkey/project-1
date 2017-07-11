@@ -8,32 +8,31 @@
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
+
   <div id="container">
+    <header>
+      Red Rover!
+    </header>
 
-  <header>
-    Red Rover!
-  </header>
+    <section id="howTo">
+      <p>Remember that game from back in the day? You and your friends split into two teams and tried to break through the other team's line? How about playing from the comfort of your very own office?!</p>
+    </section>
 
-  <section>
-    <p>Remember that game from back in the day? You and your friends split into two teams and tried to break through the other team's line? How about playing from the comfort of your very own office?!</p>
-  </section>
-
-  <section>
-    <form method="POST" action="game.html">
-      <div class="formGroup">
-        <label for="team1">Team 1 Name:</label>
-        <input type="text" name="team1" id="team1">
-      </div>
-      <div class="formGroup">
-        <label for="team2">Team 2 Name:</label>
-        <input type="text" name="team2" id="team2">
-      </div>
-      <div class="formGroup">
-        <input type="submit" value="Let's play!">
-      </div>
-    </form>
-  </section>
-
+    <section>
+      <form method="GET" action="game.html">
+        <div class="formGroup">
+          <label for="team1">Team 1 Name: </label>
+          <input type="text" name="team1" id="team1">
+        </div>
+        <div class="formGroup">
+          <label for="team2">Team 2 Name: </label>
+          <input type="text" name="team2" id="team2">
+        </div>
+        <div class="formGroup">
+          <input type="submit" value="Let's play!">
+        </div>
+      </form>
+    </section>
   </div>
 
 </body>

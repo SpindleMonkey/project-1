@@ -16,9 +16,10 @@ body {
  */
 header {
   color: red;
-  font-size: 48px;
-  font-weight: 700;
+  font-size: 72px;
+  font-weight: 900;
   margin: 0 auto;
+  text-align: center;
   width: 500px;
 }
 
@@ -31,6 +32,14 @@ section {
 }
 
 /**
+ * Set up basic team lineup defaults
+ */
+aside {
+  background: #0f0;
+  width: 150px;
+}
+
+/**
  * Set up basic footer defaults
  */
 footer {
@@ -38,13 +47,16 @@ footer {
 }
 
 input {
-  margin-bottom: 20px;
+  font: 18px 'Zilla Slab', serif;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
 input[type=submit] {
   background: rgba(255, 0, 0, 1);
   color: #fff;
-  font: 18px 'Zilla Slab', serif;
+  font-size: 24px;
+  height: 50px;
 }
 
 input[type=submit]:hover {
@@ -52,7 +64,7 @@ input[type=submit]:hover {
 }
 
 .formGroup {
-  background: rgba(255, 0, 0, .3);
+  background: rgba(0, 0, 0, .1);
   display: inline-block;
   padding: 20px;
   width: 100%;
@@ -60,6 +72,14 @@ input[type=submit]:hover {
 
 #container {
   width: 100%;
+}
+
+#lineup1 {
+  float: left;
+}
+
+#lineup2 {
+  float: right;
 }
 
 
