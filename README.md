@@ -1,7 +1,7 @@
 # project-1
-Project 1 for WDI4
+Project 1: a browser game
 
-### Overview
+### overview
 
 Remember those games we played as children? Dodge ball? Tag? Hide and seek? This is a bitter/cynical recreation of my childhood nightmare: Red Rover.
 
@@ -15,7 +15,7 @@ Possible upgrades to the game:
 * time-limit the game (you know, like the way recess limited the time we had to play this evil game)
 * varying health/strength/likeability scores for each of the team members that are updated after
 each round
-* random tools allocated to each team at the start of a new game (e.g., grenades, killer bees, stink bombs)
+* random tools allocated to each team at the start of a new game (e.g., grenades, killer bees, stink bombs, power juice)
 * ability to pick team members from a pool of mammals
 
 Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/wiki/Red_Rover), if you've successfully blocked this particular humiliation from your memory.
@@ -35,6 +35,8 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 
 ### approach taken
 
+7/11/17: Set up [Trello account] (https://trello.com/conniekephart) to track stories/progress; project board is [Red Rover] (https://trello.com/b/zXJaTWNl/red-rover).
+
 7/10/17: Started design with some rough wireframes of the landing page and game board.
 
 ![](assets/landingWireframe.JPG)
@@ -48,6 +50,8 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 ---
 
 ### unsolved problems
+
+Overall project status is tracked in [Trello] (https://trello.com/b/zXJaTWNl/red-rover).
 
 ---
 
