@@ -7,19 +7,28 @@
   <link href="https://fonts.googleapis.com/css?family=Zilla+Slab" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body onload="initGameField()">
-<div id="gamefield">
+<body onload="initGame()">
+<div id="container">
+
   <header>
     Red Rover!
   </header>
 
-  <section>
+  <aside id="lineup1">
+    <h2></h2>
+    <div class="players">
+    </div>
+  </aside>
+
+  <section id="gamefield">
     gamefield
   </section>
 
-  <aside id="lineup1">team 1 lineup</aside>
-  <aside id="lineup2">team 2 lineup</aside>
-
+  <aside id="lineup2">
+    <h2></h2>
+    <div class="players">
+    </div>
+  </aside>
 
 </div>
 <script src="js/app.js"></script>

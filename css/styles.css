@@ -18,7 +18,7 @@ header {
   color: red;
   font-size: 72px;
   font-weight: 900;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
   text-align: center;
   width: 500px;
 }
@@ -36,7 +36,6 @@ section {
  */
 aside {
   background: #0f0;
-  width: 150px;
 }
 
 /**
@@ -44,6 +43,10 @@ aside {
  */
 footer {
   width: 500px;
+}
+
+h2 {
+  font-weight: 700;
 }
 
 input {
@@ -71,15 +74,25 @@ input[type=submit]:hover {
 }
 
 #container {
-  width: 100%;
+  margin: 20px auto;
+  width: 960px;
+}
+
+#gamefield {
+  /* background: url('../images/Green-Fields.jpg') no-repeat; */
+  /* background: url('../images/wallmanfire.jpg') no-repeat; */
+  float: left;
+  width: 660px;
 }
 
 #lineup1 {
   float: left;
+  width: 150px;
 }
 
 #lineup2 {
   float: right;
+  width: 150px;
 }
 
 
