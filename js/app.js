@@ -16,9 +16,11 @@ const playerPool= [
  */
 function Player(name) {
   this.name = name;
+  this.image = '../images/tantrum-boy.jpg';
+  this.shadow = null;
 }
 
-Player.prototype.move = function() {
+Player.prototype.changeTeam = function() {
 
 };
 
@@ -29,6 +31,7 @@ function Team(id, name, size, color) {
   this.id = id;
   this.name = name;
   this.size = size;
+  this.stash = 1;
   this.players = [];
 }
 
@@ -39,7 +42,7 @@ Team.prototype.buildTeam = function(inx) {
     alert("abort! abort! we don't have enough players!");
   }
 
-  for (var i = 0; i < this.size; i++) {
+  for (let i = 0; i < this.size; i++) {
     this.players[i] = new Player(playerPool[inx][i]);
   }
   //console.log(this.players);
@@ -70,7 +73,7 @@ Team.prototype.showLineup = function() {
 };
 
 Team.prototype.showTeam = function() {
-  
+
 };
 
 function cleanUpName(name) {
@@ -111,6 +114,25 @@ function getQueryValue(key) {
 function initGame() {
   console.log("let's get ready to rumble!");
 
+  // set up the How To modal
+  let how = document.getElementById('howTo');
+  let howToButton = document.getElementById('howToModal');
+  let span = document.getElementsByClassName("close")[0];
+
+  howToButton.onclick = function() {
+    how.style.display = 'block';
+  };
+
+  span.onclick = function() {
+    how.style.display = 'none';
+  };
+
+  window.onclick = function(event) {
+    if (event.target == how) {
+      how.style.display = 'none';
+    }
+  };
+
   // create the two teams
   let team = cleanUpName(getQueryValue('team1'));
   teamOne = new Team(1, (team ? team : 'team 1'), teamSize, 'Navy');
@@ -127,5 +149,8 @@ function initGame() {
   // show the team lineups on the gamefield
   teamOne.showLineup();
   teamTwo.showLineup();
+
+  teamOne.showTeam();
+  teamTwo.showTeam();
 
 }

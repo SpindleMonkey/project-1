@@ -36,7 +36,7 @@ section {
  */
 aside {
   background: rgba(213, 225, 223, 1);
-  height: 300px;
+  height: 500px;
   padding: 0 15px;
   width: 150px;
 }
@@ -45,6 +45,9 @@ aside {
  * Set up basic footer defaults
  */
 footer {
+  color: red;
+  margin: 0 auto 20px auto;
+  text-align: center;
   width: 500px;
 }
 
@@ -71,13 +74,48 @@ input[type=submit]:hover {
 
 ul {
   list-style: circle;
+  margin: 0 -15px;
 }
 
 .formGroup {
-  background: rgba(0, 0, 0, .1);
+  background: rgba(0, 0, 0, .1);  /* pale gray */
   display: inline-block;
   padding: 20px;
   width: 100%;
+}
+
+.modal {
+  display: none;
+  position: fixed; 
+  z-index: 1; /* Sit on top of the gamefield */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,.4); /* Black w/ opacity */
+}
+
+#modalContent {
+  background-color: #fefefe;
+  margin: 30px auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 500px; /* Could be more or less, depending on screen size */
+}
+
+.close {
+  color: red;
+  float: right;
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 #container {
@@ -85,12 +123,24 @@ ul {
   width: 960px;
 }
 
+#defense {
+  left: 20px;
+  position: relative;
+  top: 20px;
+}
+
+#offense {
+  left: 30px;
+  position: relative;
+  top: 240px;
+}
+
 #gamefield {
   /* background: url('../images/Green-Fields.jpg') no-repeat; */
   /* background: url('../images/wallmanfire.jpg') no-repeat; */
-  background: rgba(134, 179, 73, 1); /* kind of olive-y green */
+  background: rgba(134, 179, 73, 1);  /* kind of olive-y green */
   float: left;
-  height: 300px;
+  height: 500px;
   width: 660px;
 }
 
@@ -101,5 +151,14 @@ ul {
 #lineup2 {
   float: right;
 }
+
+.playerShadow {
+  background: #000;
+  float: left;
+  height: 100px;
+  margin: 5px;
+  width: 100px;
+}
+
 
 
