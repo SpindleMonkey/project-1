@@ -25,7 +25,7 @@ Player.prototype.move = function() {
 /**
  * Team object definition
  */
-function Team(id, name, size) {
+function Team(id, name, size, color) {
   this.id = id;
   this.name = name;
   this.size = size;
@@ -46,14 +46,30 @@ Team.prototype.buildTeam = function(inx) {
 };
 
 Team.prototype.showLineup = function() {
-  console.log("show lineup for team" + this.id);
+  //console.log("show lineup for team" + this.id);
 
   // show the team name
   let myAside = document.querySelector('#lineup' + this.id + ' > h2');
   myAside.textContent = this.name;
-  console.log(myAside);
+  //console.log(myAside);
 
-  // show all of the players
+  // show the players' names on the gamefield
+  myAside = document.querySelector('#lineup' + this.id + ' > .players');
+  //console.log(myAside);
+
+  let playerList = document.createElement('ul');
+  let newPlayer;
+  for (let i = 0; i < this.size; i++) {
+    newPlayer = document.createElement('li');
+    newPlayer.textContent = this.players[i].name;
+    playerList.append(newPlayer);
+    //console.log(playerList);
+  }
+  myAside.append(playerList);
+
+};
+
+Team.prototype.showTeam = function() {
   
 };
 
@@ -97,11 +113,11 @@ function initGame() {
 
   // create the two teams
   let team = cleanUpName(getQueryValue('team1'));
-  teamOne = new Team(1, (team ? team : 'team 1'), teamSize);
+  teamOne = new Team(1, (team ? team : 'team 1'), teamSize, 'Navy');
   console.log(teamOne);
 
   team = cleanUpName(getQueryValue('team2'));
-  teamTwo = new Team(2, (team ? team : 'team 2'), teamSize);
+  teamTwo = new Team(2, (team ? team : 'team 2'), teamSize, 'OrangeRed');
   console.log(teamTwo);
 
   // build the players (use a different set of names, 0 or 1, for each team)
