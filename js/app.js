@@ -14,11 +14,18 @@ const playerPool = [
 ];
 
 const playerImages = [
-  '../images/snarl.jpg',
-  '../images/shy.jpg',
-  '../images/tongue.jpg',
-  '../images/raccoonIcon.png',
-  '../images/cartoon_raccoon_puppet-512.png'
+  // image path, width, height
+  [ 'images/raccoonette.png', 50, 50 ],
+  [ 'images/snarl.jpg', 50, 42 ],
+  [ 'images/raccoonette.png', 50, 50 ],
+  [ 'images/cartoon_raccoon.png', 50, 41 ],
+  [ 'images/shy.jpg', 50, 55 ],
+  [ 'images/raccoonette.png', 50, 50 ],
+  [ 'images/cartoon_raccoon.png', 50, 41 ],
+  [ 'images/tongue.jpg', 50, 37 ],
+  [ 'images/cartoon_raccoon.png', 50, 41 ],
+  [ 'images/raccoonette.png', 50, 50 ],
+  [ 'images/cartoon_raccoon.png', 50, 41 ],
 ];
 
 // the shadows of the offensive players look the same, and are defined by CSS
@@ -30,7 +37,7 @@ console.log(shadowPlayer);
  * Use random numbers to pick images for the players
  */
 const min = Math.ceil(0);
-const max = Math.floor(4);
+const max = Math.floor(10);
 function getRandom() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -41,11 +48,19 @@ function getRandom() {
 function Player(name) {
   this.name = name;
 
-  this.image = playerImages[getRandom()];
-  console.log(this.image);
+  var whichImage = getRandom();
+
+  this.image = playerImages[whichImage][0];
+  this.width =  playerImages[whichImage][1];
+  this.height = playerImages[whichImage][2];
+  //console.log(this);
 }
 
-Player.prototype.changeTeam = function() {
+Player.prototype.joinTeam = function() {
+
+};
+
+Player.prototype.leaveTeam = function() {
 
 };
 
@@ -56,13 +71,15 @@ function Team(id, name, size, color) {
   this.id = id;
   this.name = name;
   this.size = size;
-  this.color = color;
+  this.color = color; //TODO: remove this!
 
   this.stash = 1;
   this.players = [];
 }
 
 Team.prototype.buildTeam = function(inx) {
+  // inx: speciefies which array of names to use
+
   //console.log("hey! build the team!");
 
   if (this.size > playerPool[inx].length) {
@@ -108,7 +125,16 @@ Team.prototype.showTeam = function(defense) {
     // append each player's image 
     for (let i = 0; i < this.size; i++) {
       console.log("ack! add the right image here!");
+      let newGuy = document.createElement('img');
+      newGuy.setAttribute("src", this.players[i].image);
+      newGuy.setAttribute("alt", this.players[i].name);
+      newGuy.setAttribute("width", this.players[i].width);
+      newGuy.setAttribute("height", this.players[i].height);
+      console.log(this.players[i]);
+      console.log(newGuy);
+      playerList.append(newGuy);
     }
+    console.log("defense: " + playerList);
   } else {
     //console.log("team" + this.id + " is on offense");
 
@@ -182,7 +208,7 @@ function initGame() {
 
   // create the two teams
   let team = cleanUpName(getQueryValue('team1'));
-  teamOne = new Team(1, (team ? team : 'team 1'), teamSize, 'Navy');
+  teamOne = new Team(1, (team ? team : 'team 1'), teamSize, 'Navy');  // TODO: 
   //console.log(teamOne);
 
   team = cleanUpName(getQueryValue('team2'));
@@ -196,8 +222,8 @@ function initGame() {
   // show the team lineups on the gamefield
   teamOne.showLineup();
   teamTwo.showLineup();
-
-  // set the starting team (team1):
+  
+  // set the starting team (currently defaults to team1):
   defense = 1;
 
   teamOne.showTeam(defense);
