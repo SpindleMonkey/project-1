@@ -26,14 +26,17 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 * HTML
 * CSS
 * JavaScript
-* DOM manipulation _(vanilla JS or jQuery???)_
-* _Canvas?_
+* DOM manipulation using vanilla JS
 * _Flexbox?_
 
 
 ---
 
 ### approach taken
+
+7/12/17: Added a new list to Trello so I can separate the stretch goal stories from the basic game stories (streatch goal stories are in the Backlog list, and are prioritized).
+
+Created objects for Team and Player.
 
 7/11/17: Set up [Trello account](https://trello.com/conniekephart) to track stories/progress; project board is [Red Rover](https://trello.com/b/zXJaTWNl/red-rover). Updated wireframes.
 
