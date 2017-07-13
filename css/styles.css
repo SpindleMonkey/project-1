@@ -15,7 +15,7 @@ body {
  * Set up basic header defaults
  */
 header {
-  color: red;
+  color: rgb(216, 0, 0);
   font-size: 72px;
   font-weight: 900;
   margin: 0 auto 20px auto;
@@ -45,19 +45,23 @@ aside {
  * Set up basic footer defaults
  */
 footer {
-  color: red;
+  color: rgb(216, 0, 0);
   margin: 0 auto 20px auto;
   text-align: center;
   width: 500px;
 }
 
 button {
-  background: red;
+  background: rgba(216, 0, 0, 1);
   color: white;
   font: 18px 'Zilla Slab', serif;
   height: 40px;
   margin: 5px 10px;
   width: 160px;
+}
+
+button:hover {
+  background: rgba(216, 0, 0, .8);
 }
 
 h2 {
@@ -107,14 +111,14 @@ ul {
 
 #modalContent {
   background-color: #fefefe;
-  margin: 30px auto; /* 15% from the top and centered */
+  margin: 230px auto; /* from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 500px; /* Could be more or less, depending on screen size */
+  width: 600px; /* Could be more or less, depending on screen size */
 }
 
 .close {
-  color: red;
+  color: rgba(216, 0, 0, .8);
   float: right;
   font-size: 64px;
   font-weight: bold;
@@ -122,7 +126,7 @@ ul {
 
 .close:hover,
 .close:focus {
-  color: red;
+  color: rgba(216, 0, 0, 1);
   text-decoration: none;
   cursor: pointer;
 }
@@ -139,9 +143,9 @@ ul {
 }
 
 #offense {
-  left: 30px;
+  left: 20px;
   position: relative;
-  top: 290px;
+  top: 390px;
 }
 
 #gamefield {
@@ -159,6 +163,11 @@ ul {
 
 #lineup2 {
   float: right;
+}
+
+.smallButton {
+  margin: 5px 0;
+  width: 120px;
 }
 
 .playerShadow {
