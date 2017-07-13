@@ -27,14 +27,15 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 * CSS
 * JavaScript
 * DOM manipulation using vanilla JS
-* _Flexbox?_
 
 
 ---
 
 ### approach taken
 
-7/12/17: Added a new list to Trello so I can separate the stretch goal stories from the basic game stories (streatch goal stories are in the Backlog list, and are prioritized).
+7/13/17: Replaced player images with raccoons for defense; removed stick figure images from repo. Working on logic for actually playing the game now.
+
+7/12/17: Added a new list to Trello so I can separate the stretch goal stories from the basic game stories (stretch goal stories are in the Backlog list, and are prioritized).
 
 Created objects for Team and Player.
 
