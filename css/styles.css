@@ -51,6 +51,15 @@ footer {
   width: 500px;
 }
 
+button {
+  background: red;
+  color: white;
+  font: 18px 'Zilla Slab', serif;
+  height: 40px;
+  margin: 5px 10px;
+  width: 160px;
+}
+
 h2 {
   font-weight: 700;
 }
@@ -132,7 +141,7 @@ ul {
 #offense {
   left: 30px;
   position: relative;
-  top: 240px;
+  top: 290px;
 }
 
 #gamefield {
@@ -153,11 +162,11 @@ ul {
 }
 
 .playerShadow {
-  background: #000;
+  background: rgba(134, 179, 73, 1) url('../images/raccoonBack.png') no-repeat;
   float: left;
-  height: 100px;
+  height: 50px;
   margin: 5px;
-  width: 100px;
+  width: 50px;
 }
 
 
