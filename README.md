@@ -33,6 +33,11 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 
 ### approach taken
 
+7/14/17: Reworked logic to handle multiple refreshes on game.html. Since I'm using modals with forms to get user input, each time a form is submitted, game.html is refreshed and wipes out all my globals! I now save
+state before accepting a form, and restore state after accepting a form.
+
+Clearly did not do a good job of planning this project, especially handling user interactions! I'm also seeing that my Trello stories are very incomplete, which means it's not much use for tracking progress.
+
 7/13/17: Replaced player images with raccoons for defense; removed stick figure images from repo. Working on logic for actually playing the game now.
 
 7/12/17: Added a new list to Trello so I can separate the stretch goal stories from the basic game stories (stretch goal stories are in the Backlog list, and are prioritized).
