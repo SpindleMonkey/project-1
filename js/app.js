@@ -48,6 +48,22 @@ const playerImages = [
 // the shadows of the offensive players look the same
 const shadowPlayer = [ 'images/raccoonBack.png', 50, 38 ];
 
+// images used for running animation
+let nextImg = 0;
+let intervalTimer;
+let imgArr = [
+  // image path, milliseconds to display
+  ['images/what.jpg', 1000],
+  ['images/hallelujah.JPG', 1000],
+  ['images/twisty.JPG', 1000],
+  ['images/twisty2.JPG', 1000],
+  ['images/twisty.JPG', 1000],
+  ['images/twisty2.JPG', 1000],
+  ['images/twisty.JPG', 1000],
+  ['images/twisty2.JPG', 1000],
+  ['images/kaboom.png', 3000]
+];
+
 /**
  * Use random numbers to pick images for the players
  */
@@ -190,7 +206,7 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
     for (let i = 0; i < (showRunner ? this.size - 1 : this.size); i++) {
       let newShadow = document.createElement('img');
       newShadow.setAttribute("src", shadowPlayer[0]);
-      newShadow.setAttribute("alt", this.players[i].name);
+      newShadow.setAttribute("alt", this.name + ' player');
       newShadow.setAttribute("width", shadowPlayer[1]);
       newShadow.setAttribute("height", shadowPlayer[2]);
       //console.log(newShadow);
@@ -199,13 +215,15 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
 
     if (showRunner) {
       // need to show the runner!
+      let newRunnerDiv = document.createElement('div');
+      newRunnerDiv.setAttribute("id", "runner");
       let newRunner = document.createElement('img');
       newRunner.setAttribute("src", "images/hallelujah.JPG");
       newRunner.setAttribute("alt", currentChampion);
       newRunner.setAttribute("width", 64);
       newRunner.setAttribute("height", 89);
-      newRunner.setAttribute("id", "runner");
-      playerList.append(newRunner);
+      newRunnerDiv.append(newRunner);
+      document.getElementById('gamefield').append(newRunnerDiv);
     }
     //console.log("offense: " + playerList);
   }
@@ -297,7 +315,7 @@ function initGame() {
     console.log(document.getElementById('dPicked'));
   };
 
-  // TODO: set up the offense's response modal (or button?)
+  // set up the offense's response modal
   let oRunning = document.getElementById('oSent');
   console.log(oSent);
   oRunning.onclick = function() {
@@ -486,11 +504,39 @@ function makeMove() {
   restoreState();
   populateField(true); // replace one of the shadows with the runner
 
-  // pick an end point
+  moveRunner();
+
+  // show status of collision 
+  //getRunnerResult();
+
+}
+
+function updateImg() {
+  if (nextImg < imgArr.length) {
+    document.getElementById('runningRaccoon').setAttribute("src", imgArr[nextImg][0]);
+    nextImg++;
+  } else {
+    console.log('runner is done running');
+    window.clearInterval(intervalTimer);
+    document.getElementById('running').style.display = 'hidden';
+  }
+}
+
+function moveRunner() {
+  console.log('runner is, well, running!');
+
+  let animate = document.getElementById('running');
+  animate.style.display = 'block';  
+
+  // show each image for the same amount of time
+  intervalTimer = window.setInterval(updateImg, 1000);
+
+  // show results
+  // update gamefield
+
   // set up the animation
   // start the animation
   // collide!
-
 }
 
 function gameOver() {

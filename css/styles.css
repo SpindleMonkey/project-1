@@ -158,7 +158,18 @@ ul {
   /* left: 20px;*/
   position: relative;
   text-align: center;
-  top: 345px; /* was 375 before adding the runner */
+  top: 375px; 
+}
+
+#runner {
+  position: relative;
+  /* text-align: center; */
+  top: 285px;
+  left: 10px;
+}
+
+#runningRaccoon {
+  background: #fff;
 }
 
 #gamefield {
