@@ -68,6 +68,10 @@ h2 {
   font-weight: 700;
 }
 
+img {
+  display: inline-block;
+}
+
 input {
   font: 18px 'Zilla Slab', serif;
   margin-bottom: 15px;
@@ -83,6 +87,10 @@ input[type=submit] {
 
 input[type=submit]:hover {
   background: rgba(255, 0, 0, .8);
+}
+
+select {
+  font-size: inherit;
 }
 
 ul {
@@ -109,7 +117,7 @@ ul {
   background-color: rgba(0,0,0,.4); /* Black w/ opacity */
 }
 
-#modalContent {
+.modalContent {
   background-color: #fefefe;
   margin: 230px auto; /* from the top and centered */
   padding: 20px;
@@ -117,13 +125,16 @@ ul {
   width: 600px; /* Could be more or less, depending on screen size */
 }
 
-.close {
+.close,
+.close2 {
   color: rgba(216, 0, 0, .8);
   float: right;
   font-size: 64px;
   font-weight: bold;
 }
 
+.close:hover,
+.close:focus,
 .close:hover,
 .close:focus {
   color: rgba(216, 0, 0, 1);
@@ -137,15 +148,17 @@ ul {
 }
 
 #defense {
-  left: 20px;
+  /* left: 20px; */
   position: relative;
+  text-align: center;
   top: 20px;
 }
 
 #offense {
-  left: 20px;
+  /* left: 20px;*/
   position: relative;
-  top: 390px;
+  text-align: center;
+  top: 345px; /* was 375 before adding the runner */
 }
 
 #gamefield {
@@ -177,6 +190,8 @@ ul {
   margin: 5px;
   width: 50px;
 }
+
+
 
 
 

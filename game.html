@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css?family=Zilla+Slab" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body onload="initGame()">
+<body onload="route()">
 <div id="container">
 
   <header>
@@ -38,7 +38,7 @@
 </div>
 
 <div id="howTo" class="modal">
-  <div id="modalContent">
+  <div class="modalContent">
     <span class="close">&times;</span>
     <h2>How to play</h2>
     <p>The game starts with two teams of equal size. One team starts the game by calling "Red Rover, Red Rover" and requesting one of the opposing team members to "come over!"</p>
@@ -47,6 +47,26 @@
     <li>If you don't want to send your team member over and you still have something in your stash, you can use that instead (just click the button that appears beneath your team lineup)</li>
     <li>When one of the teams has acqured all of the players (or the other team has been obiterated somehow), that team is the winner</li>
     </ul>
+  </div>
+</div>
+
+<div id="selectPlayer" class="modal">
+  <div class="modalContent">
+    <!-- <span class="close2">&times;</span> -->
+    <h2></h2>
+    <form>
+      <p>Red Rover, Red Rover, send <span id="ddown"></span> right over!</p>
+      <input type="submit" id="dPicked" value="Ready!">
+    </form>
+  </div>
+</div>
+
+<div id="sendPlayer" class="modal">
+  <div class="modalContent">
+    <h2></h2>
+    <form>
+      <input type="hidden" name="token" value="oReady">
+      <input type="submit" id="oSent" value="On the way!">
   </div>
 </div>
 
