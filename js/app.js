@@ -50,7 +50,7 @@ const shadowPlayer = [ 'images/raccoonBack.png', 50, 38 ];
 
 // images used for running animation
 let nextImg = 0;
-let intervalTimer;
+let intervalId;
 let imgArr = [
   // image path, milliseconds to display
   ['images/what.jpg', 1000],
@@ -67,10 +67,10 @@ let imgArr = [
 /**
  * Use random numbers to pick images for the players
  */
-const min = Math.ceil(0);
-const max = Math.floor(10);
-function getRandom() {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandom(min, max) {
+  let myMin = Math.ceil(min);
+  let myMax = Math.floor(max);
+  return Math.floor(Math.random() * (myMax - myMin + 1)) + myMin;
 }
 
 
@@ -84,7 +84,7 @@ function getRandom() {
 function Player(name) {
   this.name = name;
 
-  var whichImage = getRandom();
+  var whichImage = getRandom(0, 10);
 
   this.image = playerImages[whichImage][0];   // image path
   this.width =  playerImages[whichImage][1];  // image width
@@ -215,6 +215,7 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
 
     if (showRunner) {
       // need to show the runner!
+      /*
       let newRunnerDiv = document.createElement('div');
       newRunnerDiv.setAttribute("id", "runner");
       let newRunner = document.createElement('img');
@@ -224,6 +225,7 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
       newRunner.setAttribute("height", 89);
       newRunnerDiv.append(newRunner);
       document.getElementById('gamefield').append(newRunnerDiv);
+      */
     }
     //console.log("offense: " + playerList);
   }
@@ -504,46 +506,68 @@ function makeMove() {
   restoreState();
   populateField(true); // replace one of the shadows with the runner
 
+  // let's see that runner run!
   moveRunner();
-
-  // show status of collision 
-  //getRunnerResult();
-
 }
 
-function updateImg() {
+function runRunner() {
   if (nextImg < imgArr.length) {
     document.getElementById('runningRaccoon').setAttribute("src", imgArr[nextImg][0]);
     nextImg++;
   } else {
-    console.log('runner is done running');
-    window.clearInterval(intervalTimer);
-    document.getElementById('running').style.display = 'hidden';
+    //console.log('runner is done running');
+    //console.log(intervalId);
+    window.clearInterval(intervalId);
+    let animate = document.getElementById('running');
+    animate.style.display = 'none'; 
+
+    // show a new modal with the results of the hit 
+    var myModal= document.querySelector('#running > .modalContent2 > h2');
+
+    // now figure out which side gains a new player
+    var whoWon = getRandom(1, 23);
+    if (whoWon > 17) {
+      // offense broke through the line!
+      whoWon = gameState.offense - 1;
+      console.log(theTeams[whoWon].name + ' broke through the line!');
+      myModal.textContent = 'Hey, ' + theTeams[hwoWon].name + '! ' + currentChampion + 'broke through the line!';
+
+      var ddown = buildDropdown(theTeams[gameState.defense - 1]);
+      console.log(ddown);
+      // add the selected defensive player to the offense
+    } else {
+      // boo! defense held the line!
+      whoWon = gameState.defense - 1;
+      console.log(theTeams[whoWon].name + ' held the line!');
+      // remove currentChampion from the offense
+      // add currentChampion to the defense
+    }
+
+    // TODO: in both cases, there is a button to be clicked to keep the game going
+    // and update the teams appropriately
+
+    // TODO: switch sides and start again
+
   }
 }
 
 function moveRunner() {
-  console.log('runner is, well, running!');
+  //console.log('runner is, well, running!');
 
   let animate = document.getElementById('running');
   animate.style.display = 'block';  
 
   // show each image for the same amount of time
-  intervalTimer = window.setInterval(updateImg, 1000);
-
-  // show results
-  // update gamefield
-
-  // set up the animation
-  // start the animation
-  // collide!
+  intervalId = window.setInterval(runRunner, 750);
+  //console.log(intervalId);
 }
 
+/**
+ * check team sizes! If a team has no more members, it lost (which means the other 
+ * team won and the game is over!)
+ * but if both teams still have at least 1 member, the game is not over
+ */
 function gameOver() {
-  // check team sizes! If a team has no more members, it lost (which means the other 
-  // team won and the game is over!)
-  // but if both teams still have at least 1 member, the game is not over
-
   if (theTeams[0].size === 0) {
     // Aww! this team lost and the other team won!
     console.log("Team" + theTeams[1].id + " won!");
@@ -557,14 +581,14 @@ function gameOver() {
   return false; // the game is on!
 }
 
+/**
+ *  this function builds a dropdown, and populates it
+ * with the names of the players belonging to the
+ * aTeam Team object
+ *
+ * returns: the dropdown element
+ */
 function buildDropdown(aTeam) {
-  /**
-   *  this function builds a dropdown, and populates it
-   * with the names of the players belonging to the
-   * aTeam Team object
-   *
-   * returns: the dropdown element
-   */
   var dropdown = document.createElement('select');
   dropdown.setAttribute("required", "required");
   dropdown.setAttribute("name", "champ");
@@ -619,10 +643,11 @@ function playGame() {
 }
 
 /**
- * look at the query keys to see how we got here!
+ * look at the query keyvalue pairs to see how we got here!
  * - if team1 and team2 are in the query keys, we got here from the landing page
  *   and are starting a new game
  * - if champ is the query key, we're in the middle of a game
+ * - if token is the query key, the offense has agreed to send over their champion
  * - if there are no query keys, I think somebody came directly to the game
  *   page without going through the landing page which I'm saying means
  *   they're starting a new game with the default team names!

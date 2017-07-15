@@ -125,6 +125,15 @@ ul {
   width: 600px; /* Could be more or less, depending on screen size */
 }
 
+.modalContent2 {
+  background-color: #fefefe;
+  margin: 140px auto; /* from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 600px; /* Could be more or less, depending on screen size */
+  height: 550px;
+}
+
 .close,
 .close2 {
   color: rgba(216, 0, 0, .8);
@@ -163,7 +172,7 @@ ul {
 
 #runner {
   position: relative;
-  /* text-align: center; */
+  text-align: center;
   top: 285px;
   left: 10px;
 }
