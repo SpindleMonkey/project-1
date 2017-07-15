@@ -38,6 +38,9 @@ state before accepting a form, and restore state after accepting a form.
 
 Clearly did not do a good job of planning this project, especially handling user interactions! I'm also seeing that my Trello stories are very incomplete, which means it's not much use for tracking progress.
 
+Scaling back the animation due to time/ability. Instead of showing the player running across the field
+and attempting to break through the line, I'm using a modal to show a little raccoon scrambling and the impact. A second modal will reveal the results. Lame, but I'm running out of time and it will do the job.
+
 7/13/17: Replaced player images with raccoons for defense; removed stick figure images from repo. Working on logic for actually playing the game now.
 
 7/12/17: Added a new list to Trello so I can separate the stretch goal stories from the basic game stories (stretch goal stories are in the Backlog list, and are prioritized).
