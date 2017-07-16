@@ -33,6 +33,10 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 
 ### approach taken
 
+7/15/17: switched from an interval timer to individual timeouts for the animation because I need to use
+different values. Adding more modals and more logic to route() to communicate the status of the player
+trying to break through the line. Still trying to identify places I can scale back because it feels like I still have way too much to do (converting animation on the field itself to modals was a huge help, though, and that might be all I can do to simplify the game for now).
+
 7/14/17: Reworked logic to handle multiple refreshes on game.html. Since I'm using modals with forms to get user input, each time a form is submitted, game.html is refreshed and wipes out all my globals! I now save
 state before accepting a form, and restore state after accepting a form.
 
