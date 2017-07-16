@@ -21,7 +21,7 @@ let gameState = {
   restore: function(d, o) {
     defense = d;
     offense = o;
-  }
+  },
 };  
 
 // some player names
@@ -50,7 +50,7 @@ const shadowPlayer = [ 'images/raccoonBack.png', 50, 38 ];
 
 // images used for running animation
 let nextImg = 0;
-let intervalId;
+let timerId;
 let imgArr = [
   // image path, milliseconds to display
   ['images/what.jpg', 1000],
@@ -325,6 +325,13 @@ function initGame() {
     console.log("o is running");
   };
 
+  // st up the kaboom response modal
+  let kaboom = document.getElementById('kaboomResult');
+  console.log(kaboom);
+  kaboom.onclick= function() {
+    console.log('the kaboom happened');
+  };
+
   // create the two teams
   let team = getQueryValue('team1');
   if (team) {
@@ -513,16 +520,16 @@ function makeMove() {
 function runRunner() {
   if (nextImg < imgArr.length) {
     document.getElementById('runningRaccoon').setAttribute("src", imgArr[nextImg][0]);
+    timerId = setTimeout(runRunner, imgArr[nextImg][1]);
     nextImg++;
   } else {
     //console.log('runner is done running');
     //console.log(intervalId);
-    window.clearInterval(intervalId);
     let animate = document.getElementById('running');
     animate.style.display = 'none'; 
 
     // show a new modal with the results of the hit 
-    var myModal= document.querySelector('#running > .modalContent2 > h2');
+    var kaboomModal= document.querySelector('#kaboomResult > .modalContent > h2');
 
     // now figure out which side gains a new player
     var whoWon = getRandom(1, 23);
@@ -530,18 +537,27 @@ function runRunner() {
       // offense broke through the line!
       whoWon = gameState.offense - 1;
       console.log(theTeams[whoWon].name + ' broke through the line!');
-      myModal.textContent = 'Hey, ' + theTeams[hwoWon].name + '! ' + currentChampion + 'broke through the line!';
+      kaboomModal.textContent = 'Hey, ' + theTeams[whoWon].name + '! ' + currentChampion + 'broke through the line!';
 
+      kaboomModal = document.querySelector('#kaboomResult > .modalContent > form > p');
       var ddown = buildDropdown(theTeams[gameState.defense - 1]);
       console.log(ddown);
+      kaboomModal.textContent = 'Who do you want to add to the team? <span id="pick">' + ddown + '</span>';
+
+      kaboomModal = document.querySelector('#kaboomModal > .modalContent > form > input');
+      kaboomModal.setAttribute("value", "Woohoo!");
       // add the selected defensive player to the offense
     } else {
       // boo! defense held the line!
       whoWon = gameState.defense - 1;
       console.log(theTeams[whoWon].name + ' held the line!');
+      kaboomModal.textContent = 'Sorry, ' + theTeams[gameState.offense - 1].name + ' :( but that other team held the line.';
       // remove currentChampion from the offense
       // add currentChampion to the defense
     }
+
+    kaboomModal = document.getElementById('kaboomResult');
+    kaboomModal.style.display = 'block';
 
     // TODO: in both cases, there is a button to be clicked to keep the game going
     // and update the teams appropriately
@@ -558,8 +574,9 @@ function moveRunner() {
   animate.style.display = 'block';  
 
   // show each image for the same amount of time
-  intervalId = window.setInterval(runRunner, 750);
-  //console.log(intervalId);
+  timerId = window.setTimeout(runRunner, imgArr[nextImg][1]); // set the timeout from imgArr
+  nextImg++;  // move to the next image
+  //console.log(timerId);
 }
 
 /**
@@ -664,6 +681,9 @@ function route() {
   } else if (getQueryValue('token')) {
     console.log('RoReady');
     makeMove();
+  } else  if (getQueryValue('token2')) {
+    console.log('over');
+    promptDefense();
   } else {
     // assuming we're starting a new game with the default team names
     console.log('guessing we are starting a new game with default team names');
