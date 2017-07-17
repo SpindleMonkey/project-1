@@ -20,6 +20,7 @@ each round
 
 Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/wiki/Red_Rover), if you've successfully blocked this particular humiliation from your memory.
 
+
 ---
 
 ### technologies used
@@ -32,6 +33,8 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 ---
 
 ### approach taken
+
+7/17/17: Game is playable! The final product is a state machine encapsulated in 2 files: game.html and js/app.js (with css/styles.css for the styling). When game.html is loaded, a routing function, route(), is called that decides where we are in the game, and calls the function corresponding to the next state. When the end of the game is reached, the state machine is exited and the users are returned to the landing page.
 
 7/16/17: Finally figured out why I was getting form values from 2 different forms--I was missing the closing form tag on the first form. Once that was fixed, I worked through the rest of the game states and finally, FINALLY, was able to play a full game.
 
@@ -51,6 +54,8 @@ and attempting to break through the line, I'm using a modal to show a little rac
 
 7/13/17: Replaced player images with raccoons for defense; removed stick figure images from repo. Working on logic for actually playing the game now.
 
+Not using radio buttons to select the runner, as shown in the wireframes. Will use a dropdown in a modal instead.
+
 7/12/17: Added a new list to Trello so I can separate the stretch goal stories from the basic game stories (stretch goal stories are in the Backlog list, and are prioritized).
 
 Created objects for Team and Player.
@@ -66,16 +71,17 @@ Created objects for Team and Player.
 ---
 
 ### installation instructions
+There are two options:
+1. (Preferred) Run the game from GitHub:
+2. Copy the repo to your machine, and run locally. You really should run from the GitHub repo because then you'll get all the bug fixes and updates as they happen.
+
 
 ---
 
 ### unsolved problems
 1. I am still not the artist I likt to think I could be. Using other people's images for my raccoons is working, and I rather like the mish-mash of styles, but my game would be a whole lot cuter if the styles matched.
-2. Animation still baffles me: I made my animation from a set of images and timeouts which reminds me of Monty Python (and that's ok), but isn't the smooth look I was hoping to achieve. I wanted to move the player from the bottom of the screen to a spot between 2 players at the top of the screen with CSS, and then drop an image over the collision point before.
+2. Animation still baffles me: I made my animation from a set of images and timeouts which reminds me of Monty Python (and that's ok), but isn't the smooth look I was hoping to achieve. I wanted to move the player from the bottom of the screen to a spot between 2 players at the top of the screen with CSS and lots of math, and then drop an image over the collision point before showing the result of the collision.
 3. See the backlog in [Trello](https://trello.com/b/zXJaTWNl/red-rover).
-4. The 'how to play' and 'start a new game' buttons aren't clickable because the modals always sit on top of them. They also don't work at the moment, but I want at least the 'how to play' button to work at some point.
+4. The 'How to play' and 'Start a new game' buttons aren't clickable because the modals always sit on top of them. They also don't work at the moment, but I want at least the 'How to play' button to work at some point.
 5. Not responsive.
 
----
-
-### etc.
