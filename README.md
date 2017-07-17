@@ -72,7 +72,7 @@ Created objects for Team and Player.
 
 ### installation instructions
 There are two options:
-1. (Preferred) Run the game from GitHub:
+1. (Preferred) Run the game from GitHub: [Red Rover](https://spindlemonkey.github.io/project-1/)
 2. Copy the repo to your machine, and run locally. You really should run from the GitHub repo because then you'll get all the bug fixes and updates as they happen.
 
 
