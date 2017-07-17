@@ -39,11 +39,11 @@ let imgArr = [
   // image path, milliseconds to display
   ['images/what.jpg', 750],
   ['images/hallelujah.JPG', 1000],
-  ['images/twisty.JPG', 500],
-  ['images/twisty2.JPG', 500],
-  ['images/twisty.JPG', 500],
-  ['images/twisty2.JPG', 500],
-  ['images/twisty.JPG', 500],
+  ['images/twisty.jpg', 500],
+  ['images/twisty2.jpg', 500],
+  ['images/twisty.jpg', 500],
+  ['images/twisty2.jpg', 500],
+  ['images/twisty.jpg', 500],
   ['images/kaboom.png', 2500]
 ];
 
