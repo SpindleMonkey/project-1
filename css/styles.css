@@ -68,12 +68,6 @@ h2 {
   font-weight: 700;
 }
 
-/*
-img {
-  display: inline-block;
-}
-*/
-
 input {
   font: 18px 'Zilla Slab', serif;
   margin-bottom: 15px;
@@ -173,15 +167,7 @@ ul {
   top: 375px; 
 }
 
-/*
-#runner {
-  position: relative;
-  text-align: center;
-  top: 285px;
-  left: 10px;
-}
-*/
-
+/* box containing the #offense and #defense boxes; represents the entire game field */
 #gamefield {
   background: rgba(134, 179, 73, 1) url('../images/checkerboard-tile-pattern.jpg'); 
   float: left;
@@ -197,19 +183,6 @@ ul {
 /* box containing list of current team 2 members; sits to right of gamefield */
 #lineup2 {
   float: right;
-}
-
-.smallButton {
-  margin: 5px 0;
-  width: 120px;
-}
-
-.playerShadow {
-  background: rgba(134, 179, 73, 1) url('../images/raccoonBack.png') no-repeat;
-  float: left;
-  height: 50px;
-  margin: 5px;
-  width: 50px;
 }
 
 #pickPlayer {
