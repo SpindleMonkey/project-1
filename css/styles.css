@@ -159,14 +159,14 @@ ul {
   width: 960px;
 }
 
-/* box sits at top edge of game field */
+/* box sits along top edge of game field */
 #defense {
   position: relative;
   text-align: center;
   top: 20px;
 }
 
-/* box sits at bottom edge of game field */
+/* box sits along bottom edge of game field */
 #offense {
   position: relative;
   text-align: center;
@@ -189,10 +189,12 @@ ul {
   width: 660px;
 }
 
+/* box containing list of current team 1 members; sits to left of gamefield */
 #lineup1 {
   float: left;
 }
 
+/* box containing list of current team 2 members; sits to right of gamefield */
 #lineup2 {
   float: right;
 }
