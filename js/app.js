@@ -1,18 +1,19 @@
 
 let theTeams = [];
-let currentChampion;  // holds the name of the poor sap who has to break through the other team
+let currentChampion; // holds the name of the poor sap who has to break through the other team
 
-// for pahse 1 of the game, we'll use a fixed team size 
+// for phase 1 of the game, we'll use a fixed team size (and it's set to 3 so the game doesn't go on forever!)
 const teamSize = 3;
 
 let stateOfPlay;
 
-// some player names
+// some player names to use when building teams
 const playerPool = [
   [ 'joe bob', 'spike', 'annie', 'maurice', 'zelda', 'oskar', 'stumpy joe', 'izzie', 'jimmy sue', 'doug' ],
-  [ 'bubba', 'livvie', 'billie', 'kevvie', 'lola', 'sam', 'charlie', 'byrdie', 'elvis', 'lucy' ]
+  [ 'bubba', 'livvie', 'kevvie', 'elvis', 'lola', 'sam', 'charlie', 'byrdie', 'billie', 'lucy' ]
 ];
 
+// set of player images to assign to offense--images are picked randomly so you never know what faces you'll be up against
 const playerImages = [
   // image path, width, height
   [ 'images/raccoonette.png', 50, 50 ],
@@ -28,7 +29,7 @@ const playerImages = [
   [ 'images/cartoon_raccoon.png', 50, 41 ],
 ];
 
-// the shadows of the offensive players look the same
+// the shadows of the offensive players all look the same since we're looking at their backs
 const shadowPlayer = [ 'images/raccoonBack.png', 50, 38 ];
 
 // images used for running animation
@@ -47,7 +48,8 @@ let imgArr = [
 ];
 
 /**
- * Use random numbers to pick images for the players
+ * Use random numbers to pick images for the players, to decide whether the player breaks 
+ * through the line, etc. This version returns from min up to and including max (inclusive).
  */
 function getRandom(min, max) {
   let myMin = Math.ceil(min);
@@ -68,17 +70,20 @@ function GameState() {
   this.offense = 2;
 }
 
+// inits game state; all games start with team1 on defense
 GameState.prototype.init = function() {
   this.defense = 1;
   this.offense = 2;
 };
 
+// move defense to offense, and offense to defense
 GameState.prototype.swapSides = function() {
   let temp = this.defense;
   this.defense = this.offense;
   this.offense = temp;
 };
 
+// restores game state after a state change
 GameState.prototype.restore = function(d, o) {
   this.defense = d;
   this.offense = o;
@@ -100,10 +105,6 @@ function Player(name, loc, teamId) {
   //console.log(this);
 }
 
-Player.prototype.changeTeam = function() {
-
-};
-
 /**
  * Team object definition
  */
@@ -116,10 +117,9 @@ function Team(id, name, size) {
   this.players = [];
 }
 
+// hard-coded team building method: assigns players to a team
 Team.prototype.buildTeam = function(arr) {
   // inx: speciefies which array of names to use
-
-  //console.log("hey! build the team!");
 
   if (this.size > arr.length) {
     alert("abort! abort! we don't have enough players!");
@@ -128,20 +128,16 @@ Team.prototype.buildTeam = function(arr) {
   for (let i = 0; i < this.size; i++) {
     this.players[i] = new Player(arr[i], i, this.id);
   }
-  //console.log(this.players);
 };
 
+// shows the team lineup in the appropriate sidebar (team 1 on the left, team 2 on the right)
 Team.prototype.showLineup = function() {
-  //console.log("show lineup for team" + this.id);
-
   // show the team name
   let myAside = document.querySelector('#lineup' + this.id + ' > h2');
   myAside.textContent = this.name;
-  //console.log(myAside);
 
   // show the players' names on the gamefield
   myAside = document.querySelector('#lineup' + this.id + ' > .players');
-  //console.log(myAside);
 
   let playerList = document.createElement('ul');
   let newPlayer;
@@ -149,25 +145,14 @@ Team.prototype.showLineup = function() {
     newPlayer = document.createElement('li');
     newPlayer.textContent = this.players[i].name;
     playerList.append(newPlayer);
-
-    // TEST TEST TEST
-    /*
-    newPlayer = document.createElement('li');
-    newPlayer.textContent = this.players[i].name + " II";
-    playerList.append(newPlayer); 
-    */
-
-    //console.log(playerList);
   }
   myAside.append(playerList);
-  //console.log('appended the lineup');
-
 };
 
+// displays the player images on the game field
 Team.prototype.showTeam = function(gState, showRunner = false) {
   console.log(gState);
   if (gState.defense === this.id) {
-   // console.log("team" + this.id + " is on defense");
 
     let playerList = document.getElementById('defense');
 
@@ -177,25 +162,18 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
         playerList.removeChild(playerList.firstChild);
       }
     }
-    //console.log(playerList);
 
     // append each player's image 
     for (let i = 0; i < this.size; i++) {
-      //console.log("ack! add the right image here!");
       let newGuy = document.createElement('img');
       newGuy.setAttribute("src", this.players[i].image);
       newGuy.setAttribute("alt", this.players[i].name);
       newGuy.setAttribute("width", this.players[i].width);
       newGuy.setAttribute("height", this.players[i].height);
       newGuy.style.margin = '0 20px'; // TODO: need to adjust based on team size
-      //console.log(this.players[i]);
-      //console.log(newGuy);
       playerList.append(newGuy);
     }
-    //console.log("defense: " + playerList);
   } else {
-    //console.log("team" + this.id + " is on offense");
-
     let playerList = document.getElementById('offense');
 
     // remove any images from the last turn:
@@ -204,7 +182,6 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
         playerList.removeChild(playerList.firstChild);
       }
     }
-    //console.log(playerList);
 
     // append shadows for each offensive player
     for (let i = 0; i < (showRunner ? this.size - 1 : this.size); i++) {
@@ -213,28 +190,20 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
       newShadow.setAttribute("alt", this.name + ' player');
       newShadow.setAttribute("width", shadowPlayer[1]);
       newShadow.setAttribute("height", shadowPlayer[2]);
-      //console.log(newShadow);
       playerList.append(newShadow);
     } 
 
+    /**
     if (showRunner) {
       // need to show the runner!
-      /*
-      let newRunnerDiv = document.createElement('div');
-      newRunnerDiv.setAttribute("id", "runner");
-      let newRunner = document.createElement('img');
-      newRunner.setAttribute("src", "images/hallelujah.JPG");
-      newRunner.setAttribute("alt", currentChampion);
-      newRunner.setAttribute("width", 64);
-      newRunner.setAttribute("height", 89);
-      newRunnerDiv.append(newRunner);
-      document.getElementById('gamefield').append(newRunnerDiv);
-      */
+
+      // TODO: save this flag for future when I show the runner on the field after he's been selected
     }
-    //console.log("offense: " + playerList);
+     */
   }
 };
 
+// finds a player on the team by player name and returns the player object
 Team.prototype.findPlayer = function(who) {
   for (let i = 0; i < this.size; i++) {
     if (this.players[i].name === who) {
@@ -244,6 +213,7 @@ Team.prototype.findPlayer = function(who) {
   return null;
 };
 
+// removes a player by name from the team
 Team.prototype.removePlayer = function(who) {
   // this method assumes you have already called findPlayer to get the player object
   // you are now removing!
@@ -262,46 +232,42 @@ Team.prototype.removePlayer = function(who) {
         this.players[this.size - 1] = null;
       }
       this.size -= 1; // update the size of the team
-      //console.log('removePlayer::' + this.players);
       console.log('removePlayer::' + this.size);
       return true; // player was removed
     }
   }
 
-  console.log('removePlayer:: ' + who + ' not found');
   return false; // player wasn't found, so nobody was removed
 };
 
+// adds a player object to the team
 Team.prototype.addPlayer = function(whoObject) {
   this.players[this.size] = whoObject;
   this.size += 1;
-  console.log('addPlayer::' + whoObject.name + ' added to team; size=' + this.size);
 };
 
 // ================================================================================
 // ================================================================================
 // ================================================================================
 
+// strips the '+' from multiple word names that come from a query string
 function cleanUpName(name) {
   let parts = name.split('+');
   return parts.join(' ');
 }
 
+// looks for the specified key in the query string; returns the value (or false if not found)
 function getQueryValue(key) {
   // get the URL of the page and pull out the query string
   let query = window.location.search.substring(1);
-  //console.log('getQueryValue:: ' + query);
 
   // pull out each key/value pair
   let values = query.split('&');
-  //console.log('getQueryValue:: ' + values);
 
   // go through the key/value pairs looking for 'key'
   for (let i = 0; i < values.length; i++) {
     let kvPair = values[i].split('=');
-    //console.log('getQueryValue:: ' + kvPair);
     if (kvPair[0] == key) {
-      //console.log('getQueryValue:: ' + kvPair[0] + ': ' + kvPair[1]);
       return kvPair[1]; // return just the value
     }
   }
@@ -315,11 +281,8 @@ function getQueryValue(key) {
  * -- called only once per session
  * -- set up the field
  * -- create the 2 teams and add the players
- * -- TODO: might need to use a glabal to idicate this function has already been called???
  */
 function initGame() {
-  //console.log("let's get ready to rumble!");
-
   // set up the How To modal
   let how = document.getElementById('howTo');
   let howToButton = document.getElementById('howToModal');
@@ -337,16 +300,12 @@ function initGame() {
     if (event.target == how) {
       how.style.display = 'none';
     }
-    //if (event.target == choose) {
-    //  choose.style.display = 'none';
-    //}
   };
 
   // TODO: set up the 'start a new game' button
 
   // set up the defense's Ready button
   let dReady = document.getElementById('dPicked');
-  //console.log('initGame:: ' + dReady);
   dReady.onclick = function() {
     // get the value
     let whoIsIt = document.getElementById('champion');
@@ -356,7 +315,6 @@ function initGame() {
 
   // set up the offense's response modal
   let oRunning = document.getElementById('oSent');
-  //console.log('initGame:: ' + oSent);
   oRunning.onclick = function() {
     // the game is on!
     console.log("initGame::o is running");
@@ -364,14 +322,12 @@ function initGame() {
 
   // set up the kaboom response modal
   let kaboom = document.getElementById('turnOver');
-  //console.log(kaboom);
   kaboom.onclick= function() {
     console.log('initGame::the kaboom happened');
   };
 
   // set up the winner modal
   let winnerWinner = document.getElementById('won');
-  //console.log('initGame::' + winnerWinner);
   winnerWinner.onclick = function() {
     console.log('initGame::somebody won');
   };
@@ -381,7 +337,6 @@ function initGame() {
   if (team) {
     team = cleanUpName(team);
     theTeams[0] = new Team(1, (team ? team : 'team 1'), teamSize);  
-    //console.log('initGame:: ' + theTeams[0]);
   } else {
     // use the default name
     theTeams[0] = new Team(1, 'team 1', teamSize);
@@ -391,17 +346,13 @@ function initGame() {
   if (team) {
     team = cleanUpName(team);
     theTeams[1] = new Team(2, (team ? team : 'team 2'), teamSize);
-    //console.log('initGame:: ' + theTeams[1]);
   } else {
     // use the default name
     theTeams[1] = new Team(2, 'team 2', teamSize);
   }
 
-  //console.log("initGame::theTeams.length: " + theTeams.length);
-
   // set the starting team (currently defaults to team1):
   stateOfPlay = new GameState();
-  console.log('initGame:: ' + stateOfPlay);
 
   for (let i = 0; i < theTeams.length; i++) {
     // build the players (use a different set of names, 0 or 1, for each team)
@@ -409,38 +360,32 @@ function initGame() {
 
     // show the team lineups on the gamefield
     theTeams[i].showLineup();
-
-    // TEST TEST TEST
-    //theTeams[i].showTeam(gameState);
   }
 
-  // we need to save state for subsequent rounds of the game
+  // we need to save state for subsequent rounds of the game becaue form submissions cause a page refresh
   saveState();
 
   playGame();
 }
 
+/**
+ * First move in the game; ask the defense who they want to have the offense send over 
+ */
 function promptDefense(gameState) {
-  // first time through, this isn's necessary, but for the second and all subsequent rounds, we
-  // need to restore the state of the game becaue the page was just refreshed and all our glbal
-  // data was lost!
+  // first time through, restoreState isn's necessary, but for the second and all subsequent rounds, we
+  // need to restore the state of the game becaue the page was just refreshed and all our global
+  // data was lost/re-initialized!
   restoreState();
-
-  console.log('promptDefense:: ' + gameState);
 
   // identify which team needs to request a player be sent over
   let choose = document.querySelector('#selectPlayer > .modalContent > h2');
-  //console.log('promptDefense:: ' + choose);
   choose.textContent = "Hey, " + theTeams[stateOfPlay.defense - 1].name + "! You're up!";
 
   // build the dropdown and drop it in the modal
-  //console.log("promptDefense::offense: " + gameState.offense);
-  //console.log('promptDefense:: ' + theTeams[gameState.offense - 1]);
   var ddown = buildDropdown(theTeams[stateOfPlay.offense - 1], "champ", "champion");
   console.log("promptDefense:: " + theTeams);
 
   choose = document.getElementById('ddown');
-  //console.log(choose);
 
   // remove any dropdown from the last turn:
   if (choose.hasChildNodes()) {
@@ -452,11 +397,12 @@ function promptDefense(gameState) {
 
   choose = document.getElementById('selectPlayer');
   choose.style.display = 'block';
-  //console.log('promptDefense:: ' + choose);
 
-  // when the defense responds, a form is submitted with the selected player which 
-  // causes the page to reload! We need to save the state of the game so we can rebuild
-  // the team:
+  /**
+   * when the defense responds, a form is submitted with the selected player which 
+   * causes the page to reload! We need to save the state of the game so we can rebuild
+   * the team:
+   */
   saveState();
 }
 
@@ -469,10 +415,10 @@ function promptDefense(gameState) {
  * - gameState.offense
  * - gameState.defense
  * - player names
+ * - current champion
  * - (future) stash
  */
 function saveState() {
-  console.log('saveState::saving state');
   sessionStorage.team1 = theTeams[0].name;
   sessionStorage.team2 = theTeams[1].name;
 
@@ -485,18 +431,14 @@ function saveState() {
   for (let i = 0; i < theTeams[0].size; i++) {
     t1Names[i] = theTeams[0].players[i].name;
   }
-  console.log('saveState:: ' + t1Names);
   sessionStorage.t1Players = JSON.stringify(t1Names);
-  //console.log('saveState:: ' + sessionStorage.t1Players);
 
   var t2Names = [];
   //for (let j = 0; j < theTeams[1].players.length; j++) {
   for (let j = 0; j < theTeams[1].size; j++) {
     t2Names[j] = theTeams[1].players[j].name;
   }
-  console.log('saveState:: ' + t2Names);
   sessionStorage.t2Players = JSON.stringify(t2Names);
-  //console.log('saveState:: ' + sessionStorage.t2Players);
 
   sessionStorage.offense = stateOfPlay.offense;
   sessionStorage.defense = stateOfPlay.defense;
@@ -505,36 +447,34 @@ function saveState() {
   sessionStorage.champ = currentChampion;
 }
 
+/**
+ * Restores game state after a form has been submitted; see saveState for more info
+ */
 function restoreState() {
-  console.log('restoreState::restoring state');
-
+  // get the team names, team sizes, and lists of player for both teams
   theTeams[0] = new Team(1, sessionStorage.team1, Number(sessionStorage.team1Size));
   let playerNames = JSON.parse(sessionStorage.t1Players);
-  //console.log('restoreState:: ' + playerNames);
   theTeams[0].buildTeam(playerNames);
-  //console.log('restoreState:: ' + theTeams[0]);
 
   theTeams[1] = new Team(2, sessionStorage.team2, Number(sessionStorage.team2Size));
   playerNames = JSON.parse(sessionStorage.t2Players);
-  //console.log('restoreState:: ' + playerNames);
   theTeams[1].buildTeam(playerNames);
-  //console.log('restoreState:: ' + theTeams[1]);
 
-  //console.log('restoreState::restoring stateOfPlay');
+  // get the game state
   stateOfPlay = new GameState();
   stateOfPlay.restore(Number(sessionStorage.defense), Number(sessionStorage.offense));
-  console.log('restoreState:: ' + stateOfPlay);
 
+  // get the current champion
   currentChampion = sessionStorage.champ;
-  //console.log('restoreState:: ' + currentChampion);
 }
 
+/**
+ * Second move of the game: ask the offense if they're ready to send their player over
+ * Note: when each team has tools to be used during the game, this is also the point 
+ * when the offense can use one of their tools.
+ */
 function promptOffense(gameState) {
   let prompt = document.querySelector('#sendPlayer > .modalContent > h2');
-  //console.log(prompt);
-  //console.log(gameState);
-  //console.log(theTeams);
-  //console.log(theTeams[gameState.offense - 1]);
   prompt.textContent = "Hey, " + theTeams[gameState.offense - 1].name + "! Are you ready to send " + currentChampion + " over?";
 
   prompt = document.getElementById('sendPlayer');
@@ -543,35 +483,36 @@ function promptOffense(gameState) {
   saveState();
 }
 
+/**
+ * Update the team lineups in the sidebars, and show the team on the gamefield 
+ * Note: showSpecial is not currently used, but will be used in the future when the 
+ * current champion is shown as a special character on the field.
+ */
 function populateField(showSpecial) {
-  console.log('populateField::populating field!');
   for (let i = 0; i < theTeams.length; i++) {
     theTeams[i].showLineup();
     theTeams[i].showTeam(stateOfPlay, showSpecial);
   }
 }
 
+/** 
+ * Confirms the selected champion
+ */
 function confirmMove() {
-  console.log('confirmMove::confirming move...');
-
   restoreState();
   populateField();
 
   currentChampion = cleanUpName(getQueryValue('champ'));
-  console.log('confirmMove:: ' + currentChampion);
 
   // time for the offense to make their move
   promptOffense(stateOfPlay);
 }
 
+/**
+ * Starts the champion on his run across the field
+ */
 function makeMove() {
-  console.log('makeMove::making move...');
-
   restoreState();
-
-  // clear the query string
-  //let myToken = getQueryValue('token');
-  //console.log('makeMove:: ' + myToken);
 
   populateField(true); // replace one of the shadows with the runner
 
@@ -579,14 +520,18 @@ function makeMove() {
   moveRunner();
 }
 
+/**
+ * Handles the runner animation; timers are set based on each displayed image and when
+ * all images have been displayed, determines whether the champion broke through the 
+ * defense, or whether the defense held their line. If the offense broke through,
+ * a prompt is built asking the offense to pick a player to add to their team.
+ */
 function runRunner() {
   if (nextImg < imgArr.length) {
     document.getElementById('runningRaccoon').setAttribute("src", imgArr[nextImg][0]);
     timerId = setTimeout(runRunner, imgArr[nextImg][1]);
     nextImg++;
   } else {
-    //console.log('runRunner::runner is done running');
-    //console.log('runRunner:: ' + intervalId);
     let animate = document.getElementById('running');
     animate.style.display = 'none'; 
 
@@ -594,32 +539,25 @@ function runRunner() {
     let kaboomModal = document.querySelector('#kaboomResult > .modalContent > h2');
 
     // now figure out which side gains a new player
-    let whoWon = getRandom(1, 5);
+    let whoWon = getRandom(1, 5); //numbers are arbitrty, with a slight bias towards defense
     if (whoWon < 3) {
       // offense broke through the line!
       whoWon = stateOfPlay.offense - 1;
-      console.log('runRunner:: ' + theTeams[whoWon].name + ' broke through the line!');
       kaboomModal.textContent = 'Hey, ' + theTeams[whoWon].name + '! ' + currentChampion + ' broke through the line!';
 
       kaboomModal = document.getElementById('pickPlayer');
       kaboomModal.style.display = 'block';
 
       kaboomModal = document.getElementById('pick');
-      console.log('runRunner:: ' + kaboomModal);
       var ddown = buildDropdown(theTeams[stateOfPlay.defense - 1], "vic", "victim");
-      console.log('runRunner:: ' + ddown);
 
       kaboomModal.append(ddown);
-      console.log('runRunner:: ' + kaboomModal);
 
       kaboomModal = document.getElementById('turnOver');
-      console.log('runRunner:: ' + kaboomModal);
       kaboomModal.setAttribute("value", "Woohoo!");
-      // add the selected defensive player to the offense
     } else {
       // boo! defense held the line!
       whoWon = stateOfPlay.defense - 1;
-      console.log('runRunner:: ' + theTeams[whoWon].name + ' held the line!');
       kaboomModal.textContent = 'Sorry, ' + theTeams[stateOfPlay.offense - 1].name + ' :( but that other team held the line.';
       
       // hide the text telling the offense to pick a player since they don't get to pick a player
@@ -629,65 +567,73 @@ function runRunner() {
 
     saveState();
 
+    // show the modal with the status of the champion's run
     kaboomModal = document.getElementById('kaboomResult');
     kaboomModal.style.display = 'block';
-
   }
 }
 
+/**
+ * start the runner animation
+ */
 function moveRunner() {
   //console.log('runner is, well, running!');
 
   let animate = document.getElementById('running');
   animate.style.display = 'block';  
 
-  // show each image for the same amount of time
+  // show each image for the  amount of time in imgArr
   timerId = window.setTimeout(runRunner, imgArr[nextImg][1]); // set the timeout from imgArr
   nextImg++;  // move to the next image
-  //console.log(timerId);
 }
 
+/**
+ * Move a player from one team to the other; which player gets moved depends on whether
+ * the champion broke through the line:
+ * - if the champion broke through, the offense picked a defense player to add to their team
+ *   and the name of that player came in via the query string
+ * - if the champion did not break the line, he is added to the defense
+ */
 function movePlayer() {
   restoreState();
 
-  console.log('movePlayer::moving player to the other team');
   // if the offense broke through the line, move the selected defense player to the offense
   if (getQueryValue('vic')) {
     // move the selected player to the offense
     let playerName = cleanUpName(getQueryValue('vic'));
     let myPlayer = theTeams[stateOfPlay.defense - 1].findPlayer(playerName);
-    console.log('movePlayer:: ' + myPlayer);
     theTeams[stateOfPlay.offense - 1].addPlayer(myPlayer);
     theTeams[stateOfPlay.defense - 1].removePlayer(playerName);
-    console.log('movePlayer::offense' + theTeams[stateOfPlay.offense - 1]);
-    console.log('movePlayer::defense' + theTeams[stateOfPlay.defense - 1]);
   } else {
     // move the currentChampion from the offense to the defense
     let myPlayer = theTeams[stateOfPlay.offense - 1].findPlayer(currentChampion);
     theTeams[stateOfPlay.defense - 1].addPlayer(myPlayer);
     theTeams[stateOfPlay.offense - 1].removePlayer(currentChampion);
-    console.log('movePlayer::offense' + theTeams[stateOfPlay.offense - 1]);
-    console.log('movePlayer::defense' + theTeams[stateOfPlay.defense - 1]);
   }
 
   // change who's up, and we're ready for the next round
   stateOfPlay.swapSides();
 
+  // show the new teams
   populateField();
 
   saveState();
 
+  // look for a winner
   let winner = gameOver();
   if (winner) {
+    // game is over, we have a winner!
     proclaimWinner(winner);
   } else {
+    // game not over yet--keep playing
     promptDefense(stateOfPlay);
   }
 }
 
+/**
+ * We have a winner! Display the winner in a modal
+ */
 function proclaimWinner(winnerId) {
-  console.log('proclaimWinner::we have a winner! ' + winnerId - 1);
-
   let prompt = document.querySelector('#haveWinner > .modalContent > h2');
   prompt.textContent = 'Hey, ' + theTeams[winnerId - 1].name + '! You WON! Congratulations!';
 
@@ -696,22 +642,20 @@ function proclaimWinner(winnerId) {
 
   saveState();
 }
+
 /**
- * check team sizes! If defense has only 1 player, the game is over because 1 player can'g
+ * check team sizes! If defense has only 1 player, the game is over because 1 player can't
  * hold off a challenge; if the offense has 0 players, the game is also over because there's
  * nobody to send over
  */
 function gameOver() {
   // if the current defense has only 1 player, the game is over
   if (theTeams[stateOfPlay.defense - 1].size < 2) {
-    console.log('gameOver::defense has less than 2 players ' + theTeams[stateOfPlay.defense - 1].size);
     return stateOfPlay.offense;
   } else if (theTeams[stateOfPlay.offense - 1].size === 0) {
-    console.log('gameOver::offense has no players to send over ' + theTeams[stateOfPlay.offense - 1].size);
     return stateOfPlay.defense;
   }
 
-  console.log("gameOver::the game is (still) on");
   return false; // the game is still on!
 }
 
@@ -734,7 +678,6 @@ function buildDropdown(aTeam, selectName, optionId) {
     if (i === 0) {
       newOption.setAttribute("selected", "selected");
     }
-    console.log('buildDropdown::' + newOption);
     dropdown.append(newOption);
   }
 
@@ -742,74 +685,47 @@ function buildDropdown(aTeam, selectName, optionId) {
   return dropdown;
 }
 
+/**
+ * starts the game with the first move
+ */
 function playGame() {
-  // while their is no winner
-  //   update the gamefield with the teams
-  //   defense calls for a player (add  url('../images/team[1|2]SpeechBubble.png') center no-repeat to gamefield)
-  //   if offense has a tool and offense wants to use tool
-  //     offense uses tool
-  //     update defense team status
-  //   else
-  //     offense sends player
-  //     if offense breaks through
-  //       offense picks a defense player to add to their team
-  //     else 
-  //       defense adds offensive player to their team
-  //   if there is a winner
-  //     show winner banner with team name and player names
-  // endwhile
+  for (let i = 0; i < theTeams.length; i++) {
+    // update the teams on the field
+    theTeams[i].showTeam(stateOfPlay);
+  }
 
-  //var gameDone = false;
-  //while (!gameDone) {
-    for (let i = 0; i < theTeams.length; i++) {
-      // update the teams on the field
-      theTeams[i].showTeam(stateOfPlay);
-    }
-
-    promptDefense(stateOfPlay);
-
-    ///if (gameDone = gameOver()) {
-    //  // somebody won!
-    //  console.log(gameDone);
-    //  // show some kind of winner banner
-    //}
-  //}
+  promptDefense(stateOfPlay);
 }
 
 /**
- * look at the query keyvalue pairs to see how we got here!
+ * look at the query key/value pairs to see how we got here!
  * - if team1 and team2 are in the query keys, we got here from the landing page
  *   and are starting a new game
  * - if champ is the query key, we're in the middle of a game
  * - if token is the query key, the offense has agreed to send over their champion
+ * - if token2 is the query key, we need to move a player to the other team
+ * - if win is the query key, we had a winner and we're starting a new game
  * - if there are no query keys, I think somebody came directly to the game
  *   page without going through the landing page which I'm saying means
  *   they're starting a new game with the default team names!
  */
 function route() {
-  //console.log('inside route()');
   if (getQueryValue('team1')) {
     // initGame with team names from the landing page
-    console.log('route::init');
     initGame();
   } else if (getQueryValue('champ')) {
     //console.log('somebody got called over!');
-    console.log('route::Champ');
     confirmMove();
   } else if (getQueryValue('token')) {
-    console.log('route::oReady');
     makeMove();
   } else  if (getQueryValue('token2')) {
-    console.log('route::over');
     movePlayer();
   } else if (getQueryValue('win')) {
-    console.log('route::gameOver');
     // start a new game
     window.location.href = 'index.html';
   } else {
     // assuming we're starting a new game with the default team names
     console.log('route::guessing we are starting a new game with default team names');
-    //console.log('route::' + document.window.location.search.substring(1));
     initGame();
   }
 }
