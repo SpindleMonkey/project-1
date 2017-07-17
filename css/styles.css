@@ -1,13 +1,13 @@
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* account for border and padding in box width/height */
 }
 
 /**
  * Set up basic page defaults
  */
 body {
-  background: #fff;
-  color: #000;
+  background: #fff; /* white */
+  color: #000; /* black */
   font: 18px 'Zilla Slab', serif;
 }
 
@@ -15,9 +15,9 @@ body {
  * Set up basic header defaults
  */
 header {
-  color: rgb(216, 0, 0);
+  color: rgb(216, 0, 0);  /* reddish */
   font-size: 72px;
-  font-weight: 900;
+  font-weight: 900; /* very bold */
   margin: 0 auto 20px auto;
   text-align: center;
   width: 500px;
@@ -35,7 +35,7 @@ section {
  * Set up basic team lineup defaults
  */
 aside {
-  background: rgba(213, 225, 223, 1);
+  background: rgba(213, 225, 223, 1); /* bluey gray */
   height: 500px;
   padding: 0 15px;
   width: 150px;
@@ -45,14 +45,14 @@ aside {
  * Set up basic footer defaults
  */
 footer {
-  color: rgb(216, 0, 0);
+  color: rgb(216, 0, 0);  /* reddish */
   margin: 0 auto 20px auto;
   text-align: center;
   width: 500px;
 }
 
 button {
-  background: rgba(216, 0, 0, 1);
+  background: rgba(216, 0, 0, 1); /* reddish */
   color: white;
   font: 18px 'Zilla Slab', serif;
   height: 40px;
@@ -61,16 +61,18 @@ button {
 }
 
 button:hover {
-  background: rgba(216, 0, 0, .8);
+  background: rgba(216, 0, 0, .8); /* reddish, but less opaque */
 }
 
 h2 {
   font-weight: 700;
 }
 
+/*
 img {
   display: inline-block;
 }
+*/
 
 input {
   font: 18px 'Zilla Slab', serif;
@@ -79,14 +81,14 @@ input {
 }
 
 input[type=submit] {
-  background: rgba(255, 0, 0, 1);
+  background: rgba(216, 0, 0, 1);
   color: #fff;
   font-size: 24px;
   height: 50px;
 }
 
 input[type=submit]:hover {
-  background: rgba(255, 0, 0, .8);
+  background: rgba(216, 0, 0, .8);
 }
 
 select {
@@ -111,32 +113,32 @@ ul {
   z-index: 1; /* Sit on top of the gamefield */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 100%; /* cover full screen */
+  height: 100%; /* cover full screen */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0,0,0,.4); /* Black w/ opacity */
+  background-color: rgba(0, 0, 0, .4); /* Black with less opacity */
 }
 
 .modalContent {
-  background-color: #fefefe;
+  background-color: #fff; /* white */
   margin: 230px auto; /* from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 600px; /* Could be more or less, depending on screen size */
+  width: 600px; /* cover most of the gamefield */
 }
 
 .modalContent2 {
-  background-color: #fefefe;
+  background-color: #fff; /* white */
   margin: 140px auto; /* from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 600px; /* Could be more or less, depending on screen size */
-  height: 550px;
+  width: 600px; /* cover mot of the game field */
+  height: 550px; /* make sure we cover the game field vertically */
 }
 
 .close,
 .close2 {
-  color: rgba(216, 0, 0, .8);
+  color: rgba(216, 0, 0, .8); /* reddish, with a little less opacity */
   float: right;
   font-size: 64px;
   font-weight: bold;
@@ -146,40 +148,39 @@ ul {
 .close:focus,
 .close:hover,
 .close:focus {
-  color: rgba(216, 0, 0, 1);
+  color: rgba(216, 0, 0, 1); /* reddish, opaque */
   text-decoration: none;
   cursor: pointer;
 }
 
+/* entire screen */
 #container {
   margin: 20px auto;
   width: 960px;
 }
 
+/* box sits at top edge of game field */
 #defense {
-  /* left: 20px; */
   position: relative;
   text-align: center;
   top: 20px;
 }
 
+/* box sits at bottom edge of game field */
 #offense {
-  /* left: 20px;*/
   position: relative;
   text-align: center;
   top: 375px; 
 }
 
+/*
 #runner {
   position: relative;
   text-align: center;
   top: 285px;
   left: 10px;
 }
-
-#runningRaccoon {
-  background: #fff;
-}
+*/
 
 #gamefield {
   /* background: url('../images/Green-Fields.jpg') no-repeat; */
@@ -209,6 +210,10 @@ ul {
   height: 50px;
   margin: 5px;
   width: 50px;
+}
+
+#pickPlayer {
+  display: none;
 }
 
 

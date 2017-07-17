@@ -67,12 +67,13 @@
     <form>
       <input type="hidden" name="token" value="oReady">
       <input type="submit" id="oSent" value="On the way!">
+    </form>
   </div>
 </div>
 
 <div id="running" class="modal">
   <div class="modalContent2">
-  <img id="runningRaccoon" src="images/what.jpg" alt="running raccon">
+  <img id="runningRaccoon" src="images/what.jpg" alt="running raccoon">
   </div>
 </div>
 
@@ -80,9 +81,19 @@
   <div class="modalContent">
     <h2></h2>
     <form>
-      <p></p>
+      <p id="pickPlayer">Who do you want to add to the team? <span id="pick"></span></p>
       <input type="hidden" name="token2" value="over">
-      <input type="submit" id="turnOver" value="There's always next time">
+      <input type="submit" id="turnOver" value="Well, there's always next time">
+    </form>
+  </div>
+</div>
+
+<div id="haveWinner" class="modal">
+  <div class="modalContent">
+    <h2></h2>
+    <form>
+      <input type="hidden" name="win" value="gameOver">
+      <input type="submit" id="won" value="Good game!">
     </form>
   </div>
 </div>

@@ -3,26 +3,9 @@ let theTeams = [];
 let currentChampion;  // holds the name of the poor sap who has to break through the other team
 
 // for pahse 1 of the game, we'll use a fixed team size 
-const teamSize = 5;
+const teamSize = 3;
 
-let gameState = {
-  // determines who's turn it is (1 and 2 are the team id values)
-  defense: 1,
-  offense: 2,
-  init: function() {
-    defense = 1;
-    offense = 2;
-  },
-  swapSides: function() {
-    let temp = defense;
-    defense = offense;
-    offense = temp;
-  },
-  restore: function(d, o) {
-    defense = d;
-    offense = o;
-  },
-};  
+let stateOfPlay;
 
 // some player names
 const playerPool = [
@@ -53,15 +36,14 @@ let nextImg = 0;
 let timerId;
 let imgArr = [
   // image path, milliseconds to display
-  ['images/what.jpg', 1000],
+  ['images/what.jpg', 750],
   ['images/hallelujah.JPG', 1000],
-  ['images/twisty.JPG', 1000],
-  ['images/twisty2.JPG', 1000],
-  ['images/twisty.JPG', 1000],
-  ['images/twisty2.JPG', 1000],
-  ['images/twisty.JPG', 1000],
-  ['images/twisty2.JPG', 1000],
-  ['images/kaboom.png', 3000]
+  ['images/twisty.JPG', 500],
+  ['images/twisty2.JPG', 500],
+  ['images/twisty.JPG', 500],
+  ['images/twisty2.JPG', 500],
+  ['images/twisty.JPG', 500],
+  ['images/kaboom.png', 2500]
 ];
 
 /**
@@ -79,10 +61,36 @@ function getRandom(min, max) {
 // ================================================================================
 
 /**
+ * GameState object definition
+ */
+function GameState() {
+  this.defense = 1;
+  this.offense = 2;
+}
+
+GameState.prototype.init = function() {
+  this.defense = 1;
+  this.offense = 2;
+};
+
+GameState.prototype.swapSides = function() {
+  let temp = this.defense;
+  this.defense = this.offense;
+  this.offense = temp;
+};
+
+GameState.prototype.restore = function(d, o) {
+  this.defense = d;
+  this.offense = o;
+};
+
+/**
  * Player object definition
  */
-function Player(name) {
+function Player(name, loc, teamId) {
   this.name = name;
+  this.loc = loc; // index in the team's players array
+  this.teamId = teamId;
 
   var whichImage = getRandom(0, 10);
 
@@ -92,11 +100,7 @@ function Player(name) {
   //console.log(this);
 }
 
-Player.prototype.joinTeam = function() {
-
-};
-
-Player.prototype.leaveTeam = function() {
+Player.prototype.changeTeam = function() {
 
 };
 
@@ -122,7 +126,7 @@ Team.prototype.buildTeam = function(arr) {
   }
 
   for (let i = 0; i < this.size; i++) {
-    this.players[i] = new Player(arr[i]);
+    this.players[i] = new Player(arr[i], i, this.id);
   }
   //console.log(this.players);
 };
@@ -231,6 +235,49 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
   }
 };
 
+Team.prototype.findPlayer = function(who) {
+  for (let i = 0; i < this.size; i++) {
+    if (this.players[i].name === who) {
+      return this.players[i];
+    }
+  }
+  return null;
+};
+
+Team.prototype.removePlayer = function(who) {
+  // this method assumes you have already called findPlayer to get the player object
+  // you are now removing!
+  for (let i = 0; i < this.size; i++) {
+    if (this.players[i].name === who) {
+      // need to remove the player and then remove that player's hole in the array
+      if (i === this.size - 1) {
+        // lucky day! the player is at the end of the array
+        this.players[i] = null;
+        console.log('removePlayer::' + i);
+      } else {
+        // we need to move the remaining players up
+        for (let j = i; j < this.size - 1; j++) {
+          this.players[j] = this.players[j + 1];
+        }
+        this.players[this.size - 1] = null;
+      }
+      this.size -= 1; // update the size of the team
+      //console.log('removePlayer::' + this.players);
+      console.log('removePlayer::' + this.size);
+      return true; // player was removed
+    }
+  }
+
+  console.log('removePlayer:: ' + who + ' not found');
+  return false; // player wasn't found, so nobody was removed
+};
+
+Team.prototype.addPlayer = function(whoObject) {
+  this.players[this.size] = whoObject;
+  this.size += 1;
+  console.log('addPlayer::' + whoObject.name + ' added to team; size=' + this.size);
+};
+
 // ================================================================================
 // ================================================================================
 // ================================================================================
@@ -243,18 +290,18 @@ function cleanUpName(name) {
 function getQueryValue(key) {
   // get the URL of the page and pull out the query string
   let query = window.location.search.substring(1);
-  //console.log(query);
+  //console.log('getQueryValue:: ' + query);
 
   // pull out each key/value pair
   let values = query.split('&');
-  //console.log(values);
+  //console.log('getQueryValue:: ' + values);
 
   // go through the key/value pairs looking for 'key'
   for (let i = 0; i < values.length; i++) {
     let kvPair = values[i].split('=');
-    //console.log(kvPair);
+    //console.log('getQueryValue:: ' + kvPair);
     if (kvPair[0] == key) {
-      //console.log(kvPair[0] + ': ' + kvPair[1]);
+      //console.log('getQueryValue:: ' + kvPair[0] + ': ' + kvPair[1]);
       return kvPair[1]; // return just the value
     }
   }
@@ -297,39 +344,36 @@ function initGame() {
 
   // TODO: set up the 'start a new game' button
 
-  // set up the defense's player selection modal
-  //let choose = document.getElementById('selectPlayer');
-  //console.log(choose);
-  //let span2 = document.getElementsByClassName("close2")[0];
-  //console.log(span2);
-
-  //span2.onclick = function() {
-  //  choose.style.display = 'none';
-  //};
-
   // set up the defense's Ready button
   let dReady = document.getElementById('dPicked');
-  console.log(dReady);
+  //console.log('initGame:: ' + dReady);
   dReady.onclick = function() {
     // get the value
     let whoIsIt = document.getElementById('champion');
-    console.log(whoIsIt);
-    console.log(document.getElementById('dPicked'));
+    console.log('initGame:: ' + whoIsIt);
+    console.log('initGame:: ' + document.getElementById('dPicked'));
   };
 
   // set up the offense's response modal
   let oRunning = document.getElementById('oSent');
-  console.log(oSent);
+  //console.log('initGame:: ' + oSent);
   oRunning.onclick = function() {
     // the game is on!
-    console.log("o is running");
+    console.log("initGame::o is running");
   };
 
-  // st up the kaboom response modal
-  let kaboom = document.getElementById('kaboomResult');
-  console.log(kaboom);
+  // set up the kaboom response modal
+  let kaboom = document.getElementById('turnOver');
+  //console.log(kaboom);
   kaboom.onclick= function() {
-    console.log('the kaboom happened');
+    console.log('initGame::the kaboom happened');
+  };
+
+  // set up the winner modal
+  let winnerWinner = document.getElementById('won');
+  //console.log('initGame::' + winnerWinner);
+  winnerWinner.onclick = function() {
+    console.log('initGame::somebody won');
   };
 
   // create the two teams
@@ -337,7 +381,7 @@ function initGame() {
   if (team) {
     team = cleanUpName(team);
     theTeams[0] = new Team(1, (team ? team : 'team 1'), teamSize);  
-    //console.log(theTeams[0]);
+    //console.log('initGame:: ' + theTeams[0]);
   } else {
     // use the default name
     theTeams[0] = new Team(1, 'team 1', teamSize);
@@ -347,16 +391,17 @@ function initGame() {
   if (team) {
     team = cleanUpName(team);
     theTeams[1] = new Team(2, (team ? team : 'team 2'), teamSize);
-    //console.log(theTeams[1]);
+    //console.log('initGame:: ' + theTeams[1]);
   } else {
     // use the default name
     theTeams[1] = new Team(2, 'team 2', teamSize);
   }
 
-  //console.log("theTeams.length: " + theTeams.length);
+  //console.log("initGame::theTeams.length: " + theTeams.length);
 
   // set the starting team (currently defaults to team1):
-  gameState.init();
+  stateOfPlay = new GameState();
+  console.log('initGame:: ' + stateOfPlay);
 
   for (let i = 0; i < theTeams.length; i++) {
     // build the players (use a different set of names, 0 or 1, for each team)
@@ -369,20 +414,30 @@ function initGame() {
     //theTeams[i].showTeam(gameState);
   }
 
+  // we need to save state for subsequent rounds of the game
+  saveState();
+
   playGame();
 }
 
 function promptDefense(gameState) {
-  // idenfith which team needs to request a player be sent over
+  // first time through, this isn's necessary, but for the second and all subsequent rounds, we
+  // need to restore the state of the game becaue the page was just refreshed and all our glbal
+  // data was lost!
+  restoreState();
+
+  console.log('promptDefense:: ' + gameState);
+
+  // identify which team needs to request a player be sent over
   let choose = document.querySelector('#selectPlayer > .modalContent > h2');
-  //console.log(choose);
-  choose.textContent = "Hey, " + theTeams[gameState.defense - 1].name + "! You're up!";
+  //console.log('promptDefense:: ' + choose);
+  choose.textContent = "Hey, " + theTeams[stateOfPlay.defense - 1].name + "! You're up!";
 
   // build the dropdown and drop it in the modal
-  //console.log("offense: " + gameState.offense);
-  //console.log(theTeams[gameState.offense - 1]);
-  var ddown = buildDropdown(theTeams[gameState.offense - 1]);
-  console.log("pD: " + theTeams);
+  //console.log("promptDefense::offense: " + gameState.offense);
+  //console.log('promptDefense:: ' + theTeams[gameState.offense - 1]);
+  var ddown = buildDropdown(theTeams[stateOfPlay.offense - 1], "champ", "champion");
+  console.log("promptDefense:: " + theTeams);
 
   choose = document.getElementById('ddown');
   //console.log(choose);
@@ -397,7 +452,7 @@ function promptDefense(gameState) {
 
   choose = document.getElementById('selectPlayer');
   choose.style.display = 'block';
-  //console.log(choose);
+  //console.log('promptDefense:: ' + choose);
 
   // when the defense responds, a form is submitted with the selected player which 
   // causes the page to reload! We need to save the state of the game so we can rebuild
@@ -417,7 +472,7 @@ function promptDefense(gameState) {
  * - (future) stash
  */
 function saveState() {
-  console.log('saving state');
+  console.log('saveState::saving state');
   sessionStorage.team1 = theTeams[0].name;
   sessionStorage.team2 = theTeams[1].name;
 
@@ -427,49 +482,51 @@ function saveState() {
   // need to save the players on each team; to save space we create an array of names
   // and then stringify it and then, finally, save it to sessionStorage:
   var t1Names = [];
-  for (let i = 0; i < theTeams[0].players.length; i++) {
+  for (let i = 0; i < theTeams[0].size; i++) {
     t1Names[i] = theTeams[0].players[i].name;
   }
-  //console.log(t1Names);
+  console.log('saveState:: ' + t1Names);
   sessionStorage.t1Players = JSON.stringify(t1Names);
-  //console.log(sessionStorage.t1Players);
+  //console.log('saveState:: ' + sessionStorage.t1Players);
 
   var t2Names = [];
-  for (let j = 0; j < theTeams[1].players.length; j++) {
+  //for (let j = 0; j < theTeams[1].players.length; j++) {
+  for (let j = 0; j < theTeams[1].size; j++) {
     t2Names[j] = theTeams[1].players[j].name;
   }
-  //console.log(t2Names);
+  console.log('saveState:: ' + t2Names);
   sessionStorage.t2Players = JSON.stringify(t2Names);
-  //console.log(sessionStorage.t2Players);
+  //console.log('saveState:: ' + sessionStorage.t2Players);
 
-  sessionStorage.offense = gameState.offense;
-  sessionStorage.defense = gameState.defense;
+  sessionStorage.offense = stateOfPlay.offense;
+  sessionStorage.defense = stateOfPlay.defense;
 
   // save the current champion--need to know who this is through a couple of page loads
   sessionStorage.champ = currentChampion;
 }
 
 function restoreState() {
-  console.log('restoring state');
+  console.log('restoreState::restoring state');
 
   theTeams[0] = new Team(1, sessionStorage.team1, Number(sessionStorage.team1Size));
   let playerNames = JSON.parse(sessionStorage.t1Players);
-  //console.log(playerNames);
+  //console.log('restoreState:: ' + playerNames);
   theTeams[0].buildTeam(playerNames);
-  //console.log(theTeams[0]);
+  //console.log('restoreState:: ' + theTeams[0]);
 
   theTeams[1] = new Team(2, sessionStorage.team2, Number(sessionStorage.team2Size));
   playerNames = JSON.parse(sessionStorage.t2Players);
-  //console.log(playerNames);
+  //console.log('restoreState:: ' + playerNames);
   theTeams[1].buildTeam(playerNames);
-  //console.log(theTeams[1]);
+  //console.log('restoreState:: ' + theTeams[1]);
 
-  //console.log('restoring gameState');
-  gameState.restore(Number(sessionStorage.defense), Number(sessionStorage.offense));
-  console.log(gameState);
+  //console.log('restoreState::restoring stateOfPlay');
+  stateOfPlay = new GameState();
+  stateOfPlay.restore(Number(sessionStorage.defense), Number(sessionStorage.offense));
+  console.log('restoreState:: ' + stateOfPlay);
 
   currentChampion = sessionStorage.champ;
-  //console.log(currentChampion);
+  //console.log('restoreState:: ' + currentChampion);
 }
 
 function promptOffense(gameState) {
@@ -487,30 +544,35 @@ function promptOffense(gameState) {
 }
 
 function populateField(showSpecial) {
-  console.log('populating field!');
+  console.log('populateField::populating field!');
   for (let i = 0; i < theTeams.length; i++) {
     theTeams[i].showLineup();
-    theTeams[i].showTeam(gameState, showSpecial);
+    theTeams[i].showTeam(stateOfPlay, showSpecial);
   }
 }
 
 function confirmMove() {
-  console.log('confirming move...');
+  console.log('confirmMove::confirming move...');
 
   restoreState();
   populateField();
 
-  currentChampion = getQueryValue('champ');
-  console.log(currentChampion);
+  currentChampion = cleanUpName(getQueryValue('champ'));
+  console.log('confirmMove:: ' + currentChampion);
 
   // time for the offense to make their move
-  promptOffense(gameState);
+  promptOffense(stateOfPlay);
 }
 
 function makeMove() {
-  console.log('making move...');
+  console.log('makeMove::making move...');
 
   restoreState();
+
+  // clear the query string
+  //let myToken = getQueryValue('token');
+  //console.log('makeMove:: ' + myToken);
+
   populateField(true); // replace one of the shadows with the runner
 
   // let's see that runner run!
@@ -523,46 +585,52 @@ function runRunner() {
     timerId = setTimeout(runRunner, imgArr[nextImg][1]);
     nextImg++;
   } else {
-    //console.log('runner is done running');
-    //console.log(intervalId);
+    //console.log('runRunner::runner is done running');
+    //console.log('runRunner:: ' + intervalId);
     let animate = document.getElementById('running');
     animate.style.display = 'none'; 
 
     // show a new modal with the results of the hit 
-    var kaboomModal= document.querySelector('#kaboomResult > .modalContent > h2');
+    let kaboomModal = document.querySelector('#kaboomResult > .modalContent > h2');
 
     // now figure out which side gains a new player
-    var whoWon = getRandom(1, 23);
-    if (whoWon > 17) {
+    let whoWon = getRandom(1, 5);
+    if (whoWon < 3) {
       // offense broke through the line!
-      whoWon = gameState.offense - 1;
-      console.log(theTeams[whoWon].name + ' broke through the line!');
-      kaboomModal.textContent = 'Hey, ' + theTeams[whoWon].name + '! ' + currentChampion + 'broke through the line!';
+      whoWon = stateOfPlay.offense - 1;
+      console.log('runRunner:: ' + theTeams[whoWon].name + ' broke through the line!');
+      kaboomModal.textContent = 'Hey, ' + theTeams[whoWon].name + '! ' + currentChampion + ' broke through the line!';
 
-      kaboomModal = document.querySelector('#kaboomResult > .modalContent > form > p');
-      var ddown = buildDropdown(theTeams[gameState.defense - 1]);
-      console.log(ddown);
-      kaboomModal.textContent = 'Who do you want to add to the team? <span id="pick">' + ddown + '</span>';
+      kaboomModal = document.getElementById('pickPlayer');
+      kaboomModal.style.display = 'block';
 
-      kaboomModal = document.querySelector('#kaboomModal > .modalContent > form > input');
+      kaboomModal = document.getElementById('pick');
+      console.log('runRunner:: ' + kaboomModal);
+      var ddown = buildDropdown(theTeams[stateOfPlay.defense - 1], "vic", "victim");
+      console.log('runRunner:: ' + ddown);
+
+      kaboomModal.append(ddown);
+      console.log('runRunner:: ' + kaboomModal);
+
+      kaboomModal = document.getElementById('turnOver');
+      console.log('runRunner:: ' + kaboomModal);
       kaboomModal.setAttribute("value", "Woohoo!");
       // add the selected defensive player to the offense
     } else {
       // boo! defense held the line!
-      whoWon = gameState.defense - 1;
-      console.log(theTeams[whoWon].name + ' held the line!');
-      kaboomModal.textContent = 'Sorry, ' + theTeams[gameState.offense - 1].name + ' :( but that other team held the line.';
-      // remove currentChampion from the offense
-      // add currentChampion to the defense
+      whoWon = stateOfPlay.defense - 1;
+      console.log('runRunner:: ' + theTeams[whoWon].name + ' held the line!');
+      kaboomModal.textContent = 'Sorry, ' + theTeams[stateOfPlay.offense - 1].name + ' :( but that other team held the line.';
+      
+      // hide the text telling the offense to pick a player since they don't get to pick a player
+      kaboomModal = document.getElementById('pickPlayer');
+      kaboomModal.style.display = 'none';
     }
+
+    saveState();
 
     kaboomModal = document.getElementById('kaboomResult');
     kaboomModal.style.display = 'block';
-
-    // TODO: in both cases, there is a button to be clicked to keep the game going
-    // and update the teams appropriately
-
-    // TODO: switch sides and start again
 
   }
 }
@@ -579,23 +647,72 @@ function moveRunner() {
   //console.log(timerId);
 }
 
-/**
- * check team sizes! If a team has no more members, it lost (which means the other 
- * team won and the game is over!)
- * but if both teams still have at least 1 member, the game is not over
- */
-function gameOver() {
-  if (theTeams[0].size === 0) {
-    // Aww! this team lost and the other team won!
-    console.log("Team" + theTeams[1].id + " won!");
-    return theTeams[1].id;
-  } else if (theTeams[1].size === 0) {
-    console.log("Team" + theTeams[0].id + " won!");
-    return theTeams[0].id;
+function movePlayer() {
+  restoreState();
+
+  console.log('movePlayer::moving player to the other team');
+  // if the offense broke through the line, move the selected defense player to the offense
+  if (getQueryValue('vic')) {
+    // move the selected player to the offense
+    let playerName = cleanUpName(getQueryValue('vic'));
+    let myPlayer = theTeams[stateOfPlay.defense - 1].findPlayer(playerName);
+    console.log('movePlayer:: ' + myPlayer);
+    theTeams[stateOfPlay.offense - 1].addPlayer(myPlayer);
+    theTeams[stateOfPlay.defense - 1].removePlayer(playerName);
+    console.log('movePlayer::offense' + theTeams[stateOfPlay.offense - 1]);
+    console.log('movePlayer::defense' + theTeams[stateOfPlay.defense - 1]);
+  } else {
+    // move the currentChampion from the offense to the defense
+    let myPlayer = theTeams[stateOfPlay.offense - 1].findPlayer(currentChampion);
+    theTeams[stateOfPlay.defense - 1].addPlayer(myPlayer);
+    theTeams[stateOfPlay.offense - 1].removePlayer(currentChampion);
+    console.log('movePlayer::offense' + theTeams[stateOfPlay.offense - 1]);
+    console.log('movePlayer::defense' + theTeams[stateOfPlay.defense - 1]);
   }
 
-  console.log("the game is (still) on");
-  return false; // the game is on!
+  // change who's up, and we're ready for the next round
+  stateOfPlay.swapSides();
+
+  populateField();
+
+  saveState();
+
+  let winner = gameOver();
+  if (winner) {
+    proclaimWinner(winner);
+  } else {
+    promptDefense(stateOfPlay);
+  }
+}
+
+function proclaimWinner(winnerId) {
+  console.log('proclaimWinner::we have a winner! ' + winnerId - 1);
+
+  let prompt = document.querySelector('#haveWinner > .modalContent > h2');
+  prompt.textContent = 'Hey, ' + theTeams[winnerId - 1].name + '! You WON! Congratulations!';
+
+  prompt = document.getElementById('haveWinner');
+  prompt.style.display = 'block';  
+
+  saveState();
+}
+/**
+ * check team sizes! If defense has only 1 player, the game is over because 1 player can'g
+ * hold off a challenge; if the offense has 0 players, the game is also over because there's
+ * nobody to send over
+ */
+function gameOver() {
+  // if the current defense has only 1 player, the game is over
+  if (theTeams[stateOfPlay.defense - 1].size < 2) {
+    console.log('gameOver::defense has less than 2 players ' + theTeams[stateOfPlay.defense - 1].size);
+    return stateOfPlay.offense;
+  } else if (theTeams[stateOfPlay.offense - 1].size === 0) {
+    console.log('gameOver::offense has no players to send over ' + theTeams[stateOfPlay.offense - 1].size);
+    return stateOfPlay.defense;
+  }
+
+  console.log("gameOver::the game is (still) on");
+  return false; // the game is still on!
 }
 
 /**
@@ -605,19 +722,19 @@ function gameOver() {
  *
  * returns: the dropdown element
  */
-function buildDropdown(aTeam) {
+function buildDropdown(aTeam, selectName, optionId) {
   var dropdown = document.createElement('select');
   dropdown.setAttribute("required", "required");
-  dropdown.setAttribute("name", "champ");
+  dropdown.setAttribute("name", selectName);
   for (let i = 0; i < aTeam.size; i++) {
     var newOption = document.createElement('option');
     newOption.setAttribute("value", aTeam.players[i].name);
-    newOption.setAttribute("id", "champion");
+    newOption.setAttribute("id", optionId);
     newOption.textContent = aTeam.players[i].name;
     if (i === 0) {
       newOption.setAttribute("selected", "selected");
     }
-    //console.log(newOption);
+    console.log('buildDropdown::' + newOption);
     dropdown.append(newOption);
   }
 
@@ -646,10 +763,10 @@ function playGame() {
   //while (!gameDone) {
     for (let i = 0; i < theTeams.length; i++) {
       // update the teams on the field
-      theTeams[i].showTeam(gameState);
+      theTeams[i].showTeam(stateOfPlay);
     }
 
-    promptDefense(gameState);
+    promptDefense(stateOfPlay);
 
     ///if (gameDone = gameOver()) {
     //  // somebody won!
@@ -673,21 +790,26 @@ function route() {
   //console.log('inside route()');
   if (getQueryValue('team1')) {
     // initGame with team names from the landing page
+    console.log('route::init');
     initGame();
   } else if (getQueryValue('champ')) {
     //console.log('somebody got called over!');
-    console.log('RChamp');
+    console.log('route::Champ');
     confirmMove();
   } else if (getQueryValue('token')) {
-    console.log('RoReady');
+    console.log('route::oReady');
     makeMove();
   } else  if (getQueryValue('token2')) {
-    console.log('over');
-    promptDefense();
+    console.log('route::over');
+    movePlayer();
+  } else if (getQueryValue('win')) {
+    console.log('route::gameOver');
+    // start a new game
+    window.location.href = 'index.html';
   } else {
     // assuming we're starting a new game with the default team names
-    console.log('guessing we are starting a new game with default team names');
-    console.log(document.window.location.search.substring(1));
+    console.log('route::guessing we are starting a new game with default team names');
+    //console.log('route::' + document.window.location.search.substring(1));
     initGame();
   }
 }
