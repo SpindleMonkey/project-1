@@ -73,6 +73,8 @@ Created objects for Team and Player.
 1. I am still not the artist I likt to think I could be. Using other people's images for my raccoons is working, and I rather like the mish-mash of styles, but my game would be a whole lot cuter if the styles matched.
 2. Animation still baffles me: I made my animation from a set of images and timeouts which reminds me of Monty Python (and that's ok), but isn't the smooth look I was hoping to achieve. I wanted to move the player from the bottom of the screen to a spot between 2 players at the top of the screen with CSS, and then drop an image over the collision point before.
 3. See the backlog in [Trello](https://trello.com/b/zXJaTWNl/red-rover).
+4. The 'how to play' and 'start a new game' buttons aren't clickable because the modals always sit on top of them. They also don't work at the moment, but I want at least the 'how to play' button to work at some point.
+5. Not responsive.
 
 ---
 
