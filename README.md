@@ -33,6 +33,10 @@ Here's a [description, and some history, of Red Rover](https://en.wikipedia.org/
 
 ### approach taken
 
+7/16/17: Finally figured out why I was getting form values from 2 different forms--I was missing the closing form tag on the first form. Once that was fixed, I worked through the rest of the game states and finally, FINALLY, was able to play a full game.
+
+Instead of giving the option to play the same 2 teams again vs. starting over with the landing page, I decided to start over at the landing page once a game was won so I would have time for some more testing.
+
 7/15/17: switched from an interval timer to individual timeouts for the animation because I need to use
 different values. Adding more modals and more logic to route() to communicate the status of the player
 trying to break through the line. Still trying to identify places I can scale back because it feels like I still have way too much to do (converting animation on the field itself to modals was a huge help, though, and that might be all I can do to simplify the game for now).
@@ -66,8 +70,9 @@ Created objects for Team and Player.
 ---
 
 ### unsolved problems
-
-Overall project status is tracked in [Trello](https://trello.com/b/zXJaTWNl/red-rover).
+1. I am still not the artist I likt to think I could be. Using other people's images for my raccoons is working, and I rather like the mish-mash of styles, but my game would be a whole lot cuter if the styles matched.
+2. Animation still baffles me: I made my animation from a set of images and timeouts which reminds me of Monty Python (and that's ok), but isn't the smooth look I was hoping to achieve. I wanted to move the player from the bottom of the screen to a spot between 2 players at the top of the screen with CSS, and then drop an image over the collision point before.
+3. See the backlog in [Trello](https://trello.com/b/zXJaTWNl/red-rover).
 
 ---
 
