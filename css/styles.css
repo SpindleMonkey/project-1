@@ -183,9 +183,7 @@ ul {
 */
 
 #gamefield {
-  /* background: url('../images/Green-Fields.jpg') no-repeat; */
-  /* background: url('../images/wallmanfire.jpg') no-repeat; */
-  background: rgba(134, 179, 73, 1);  /* kind of olive-y green */
+  background: rgba(134, 179, 73, 1) url('../images/checkerboard-tile-pattern.jpg'); 
   float: left;
   height: 500px;
   width: 660px;
