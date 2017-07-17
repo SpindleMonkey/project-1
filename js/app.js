@@ -165,10 +165,10 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
     // append each player's image 
     for (let i = 0; i < this.size; i++) {
       let newGuy = document.createElement('img');
-      newGuy.setAttribute("src", this.players[i].image);
-      newGuy.setAttribute("alt", this.players[i].name);
-      newGuy.setAttribute("width", this.players[i].width);
-      newGuy.setAttribute("height", this.players[i].height);
+      newGuy.setAttribute('src', this.players[i].image);
+      newGuy.setAttribute('alt', this.players[i].name);
+      newGuy.setAttribute('width', this.players[i].width);
+      newGuy.setAttribute('height', this.players[i].height);
       newGuy.style.margin = '0 20px'; // TODO: need to adjust based on team size
       playerList.append(newGuy);
     }
@@ -185,10 +185,10 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
     // append shadows for each offensive player
     for (let i = 0; i < (showRunner ? this.size - 1 : this.size); i++) {
       let newShadow = document.createElement('img');
-      newShadow.setAttribute("src", shadowPlayer[0]);
-      newShadow.setAttribute("alt", this.name + ' player');
-      newShadow.setAttribute("width", shadowPlayer[1]);
-      newShadow.setAttribute("height", shadowPlayer[2]);
+      newShadow.setAttribute('src', shadowPlayer[0]);
+      newShadow.setAttribute('alt', this.name + ' player');
+      newShadow.setAttribute('width', shadowPlayer[1]);
+      newShadow.setAttribute('height', shadowPlayer[2]);
       playerList.append(newShadow);
     } 
 
@@ -222,7 +222,6 @@ Team.prototype.removePlayer = function(who) {
       if (i === this.size - 1) {
         // lucky day! the player is at the end of the array
         this.players[i] = null;
-        console.log('removePlayer::' + i);
       } else {
         // we need to move the remaining players up
         for (let j = i; j < this.size - 1; j++) {
@@ -380,7 +379,7 @@ function promptDefense(gameState) {
   choose.textContent = "Hey, " + theTeams[stateOfPlay.defense - 1].name + "! You're up!";
 
   // build the dropdown and drop it in the modal
-  var ddown = buildDropdown(theTeams[stateOfPlay.offense - 1], "champ", "champion");
+  var ddown = buildDropdown(theTeams[stateOfPlay.offense - 1], 'champ', 'champion');
 
   choose = document.getElementById('ddown');
 
@@ -472,7 +471,7 @@ function restoreState() {
  */
 function promptOffense(gameState) {
   let prompt = document.querySelector('#sendPlayer > .modalContent > h2');
-  prompt.textContent = "Hey, " + theTeams[gameState.offense - 1].name + "! Are you ready to send " + currentChampion + " over?";
+  prompt.textContent = 'Hey, ' + theTeams[gameState.offense - 1].name + '! Are you ready to send ' + currentChampion + ' over?';
 
   prompt = document.getElementById('sendPlayer');
   prompt.style.display = 'block';  
@@ -525,7 +524,7 @@ function makeMove() {
  */
 function runRunner() {
   if (nextImg < imgArr.length) {
-    document.getElementById('runningRaccoon').setAttribute("src", imgArr[nextImg][0]);
+    document.getElementById('runningRaccoon').setAttribute('src', imgArr[nextImg][0]);
     timerId = setTimeout(runRunner, imgArr[nextImg][1]);
     nextImg++;
   } else {
@@ -546,12 +545,12 @@ function runRunner() {
       kaboomModal.style.display = 'block';
 
       kaboomModal = document.getElementById('pick');
-      var ddown = buildDropdown(theTeams[stateOfPlay.defense - 1], "vic", "victim");
+      var ddown = buildDropdown(theTeams[stateOfPlay.defense - 1], 'vic', 'victim');
 
       kaboomModal.append(ddown);
 
       kaboomModal = document.getElementById('turnOver');
-      kaboomModal.setAttribute("value", "Woohoo!");
+      kaboomModal.setAttribute('value', 'Woohoo!');
     } else {
       // boo! defense held the line!
       whoWon = stateOfPlay.defense - 1;
@@ -665,15 +664,15 @@ function gameOver() {
  */
 function buildDropdown(aTeam, selectName, optionId) {
   var dropdown = document.createElement('select');
-  dropdown.setAttribute("required", "required");
-  dropdown.setAttribute("name", selectName);
+  dropdown.setAttribute('required', 'required');
+  dropdown.setAttribute('name', selectName);
   for (let i = 0; i < aTeam.size; i++) {
     var newOption = document.createElement('option');
-    newOption.setAttribute("value", aTeam.players[i].name);
-    newOption.setAttribute("id", optionId);
+    newOption.setAttribute('value', aTeam.players[i].name);
+    newOption.setAttribute('id', optionId);
     newOption.textContent = aTeam.players[i].name;
     if (i === 0) {
-      newOption.setAttribute("selected", "selected");
+      newOption.setAttribute('selected', 'selected');
     }
     dropdown.append(newOption);
   }
