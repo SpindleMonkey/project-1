@@ -151,7 +151,6 @@ Team.prototype.showLineup = function() {
 
 // displays the player images on the game field
 Team.prototype.showTeam = function(gState, showRunner = false) {
-  console.log(gState);
   if (gState.defense === this.id) {
 
     let playerList = document.getElementById('defense');
@@ -232,7 +231,6 @@ Team.prototype.removePlayer = function(who) {
         this.players[this.size - 1] = null;
       }
       this.size -= 1; // update the size of the team
-      console.log('removePlayer::' + this.size);
       return true; // player was removed
     }
   }
@@ -383,7 +381,6 @@ function promptDefense(gameState) {
 
   // build the dropdown and drop it in the modal
   var ddown = buildDropdown(theTeams[stateOfPlay.offense - 1], "champ", "champion");
-  console.log("promptDefense:: " + theTeams);
 
   choose = document.getElementById('ddown');
 
