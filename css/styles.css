@@ -52,16 +52,17 @@ footer {
 }
 
 button {
-  background: rgba(216, 0, 0, 1); /* reddish */
-  color: white;
-  font: 18px 'Zilla Slab', serif;
-  height: 40px;
-  margin: 5px 10px;
-  width: 160px;
+  background: #fff; /* white */
+  border: 0;
+  color: rgba(216, 0, 0, 1); /* reddish */
+  font: 24px 'Zilla Slab', serif;
+  height: 50px;
+  /* margin: 5px 10px; */
+  width: 100%;
 }
 
 button:hover {
-  background: rgba(216, 0, 0, .8); /* reddish, but less opaque */
+  color: rgba(216, 0, 0, .7); /* reddish, but less opaque */
 }
 
 h2 {
@@ -69,6 +70,7 @@ h2 {
 }
 
 input {
+  border: 0;
   font: 18px 'Zilla Slab', serif;
   margin-bottom: 15px;
   width: 100%;
@@ -128,23 +130,6 @@ ul {
   border: 1px solid #888;
   width: 600px; /* cover mot of the game field */
   height: 550px; /* make sure we cover the game field vertically */
-}
-
-.close,
-.close2 {
-  color: rgba(216, 0, 0, .8); /* reddish, with a little less opacity */
-  float: right;
-  font-size: 64px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus,
-.close:hover,
-.close:focus {
-  color: rgba(216, 0, 0, 1); /* reddish, opaque */
-  text-decoration: none;
-  cursor: pointer;
 }
 
 /* entire screen */

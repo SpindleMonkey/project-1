@@ -134,7 +134,7 @@ Team.prototype.buildTeam = function(arr) {
 Team.prototype.showLineup = function() {
   // show the team name
   let myAside = document.querySelector('#lineup' + this.id + ' > h2');
-  myAside.textContent = this.name;
+  myAside.textContent = this.name + (stateOfPlay.defense === this.id ? '*' : '');
 
   // show the players' names on the gamefield
   myAside = document.querySelector('#lineup' + this.id + ' > .players');
@@ -150,7 +150,7 @@ Team.prototype.showLineup = function() {
 };
 
 // displays the player images on the game field
-Team.prototype.showTeam = function(gState, showRunner = false) {
+Team.prototype.showTeam = function(gState) {
   if (gState.defense === this.id) {
 
     let playerList = document.getElementById('defense');
@@ -183,7 +183,7 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
     }
 
     // append shadows for each offensive player
-    for (let i = 0; i < (showRunner ? this.size - 1 : this.size); i++) {
+    for (let i = 0; i < this.size; i++) {
       let newShadow = document.createElement('img');
       newShadow.setAttribute('src', shadowPlayer[0]);
       newShadow.setAttribute('alt', this.name + ' player');
@@ -191,14 +191,6 @@ Team.prototype.showTeam = function(gState, showRunner = false) {
       newShadow.setAttribute('height', shadowPlayer[2]);
       playerList.append(newShadow);
     } 
-
-    /**
-    if (showRunner) {
-      // need to show the runner!
-
-      // TODO: save this flag for future when I show the runner on the field after he's been selected
-    }
-     */
   }
 };
 
@@ -280,27 +272,6 @@ function getQueryValue(key) {
  * -- create the 2 teams and add the players
  */
 function initGame() {
-  // set up the How To modal
-  let how = document.getElementById('howTo');
-  let howToButton = document.getElementById('howToModal');
-  let span = document.getElementsByClassName("close")[0];
-
-  howToButton.onclick = function() {
-    how.style.display = 'block';
-  };
-
-  span.onclick = function() {
-    how.style.display = 'none';
-  };
-
-  window.onclick = function(event) {
-    if (event.target == how) {
-      how.style.display = 'none';
-    }
-  };
-
-  // TODO: set up the 'start a new game' button
-
   // set up the defense's Ready button
   let dReady = document.getElementById('dPicked');
   dReady.onclick = function() {
@@ -481,13 +452,11 @@ function promptOffense(gameState) {
 
 /**
  * Update the team lineups in the sidebars, and show the team on the gamefield 
- * Note: showSpecial is not currently used, but will be used in the future when the 
- * current champion is shown as a special character on the field.
  */
-function populateField(showSpecial) {
+function populateField() {
   for (let i = 0; i < theTeams.length; i++) {
     theTeams[i].showLineup();
-    theTeams[i].showTeam(stateOfPlay, showSpecial);
+    theTeams[i].showTeam(stateOfPlay);
   }
 }
 
@@ -555,7 +524,7 @@ function runRunner() {
       // boo! defense held the line!
       whoWon = stateOfPlay.defense - 1;
       kaboomModal.textContent = 'Sorry, ' + theTeams[stateOfPlay.offense - 1].name + ' :( but that other team held the line.';
-      
+
       // hide the text telling the offense to pick a player since they don't get to pick a player
       kaboomModal = document.getElementById('pickPlayer');
       kaboomModal.style.display = 'none';
