@@ -132,6 +132,22 @@ ul {
   height: 550px; /* make sure we cover the game field vertically */
 }
 
+.close {
+  /* color: #fff; */
+  float: right;
+  /*
+  font-size: 64px;
+  font-weight: bold;
+  *.
+}
+
+.close:hover,
+.close:focus {
+  /* color: #fff; */
+  text-decoration: none;
+  cursor: pointer;
+}
+
 /* entire screen */
 #container {
   margin: 20px auto;

@@ -265,6 +265,12 @@ function getQueryValue(key) {
   return false;
 }
 
+function restartGame() {
+  console.log('restartGame::restart');
+  // restart the game
+  window.location.href = 'index.html';
+}
+
 /**
  * Initialize the game 
  * -- called only once per session
@@ -272,6 +278,14 @@ function getQueryValue(key) {
  * -- create the 2 teams and add the players
  */
 function initGame() {
+  // set up the game restart button on all but the running raccoon and winning modals
+  let gRestart1 = document.querySelector('#selectPlayer > .modalContent > .close');
+  gRestart1.addEventListener('click', restartGame);
+  let gRestart2 = document.querySelector('#sendPlayer > .modalContent > .close');
+  gRestart2.addEventListener('click', restartGame);
+  let gRestart3 = document.querySelector('#kaboomResult > .modalContent > .close');
+  gRestart3.addEventListener('click', restartGame);
+
   // set up the defense's Ready button
   let dReady = document.getElementById('dPicked');
   dReady.onclick = function() {
@@ -433,6 +447,13 @@ function restoreState() {
 
   // get the current champion
   currentChampion = sessionStorage.champ;
+
+  // restore the event listeners for the restart game buttons on the modals
+  let gRestart2 = document.querySelector('#sendPlayer > .modalContent > .close');
+  gRestart2.addEventListener('click', restartGame);
+  let gRestart3 = document.querySelector('#kaboomResult > .modalContent > .close');
+  gRestart3.addEventListener('click', restartGame);
+
 }
 
 /**
@@ -675,7 +696,7 @@ function playGame() {
  *   they're starting a new game with the default team names!
  */
 function route() {
-  if (getQueryValue('team1')) {
+  if (getQueryValue('team1') || getQueryValue('team2')) {
     // initGame with team names from the landing page
     initGame();
   } else if (getQueryValue('champ')) {
